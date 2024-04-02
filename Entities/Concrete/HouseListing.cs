@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class HouseListings
+    public class HouseListing
     {
         public int HouseListingId { get; set; }
         public int ListingId { get; set; }
