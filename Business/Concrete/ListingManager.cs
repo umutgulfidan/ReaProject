@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -16,29 +19,53 @@ namespace Business.Concrete
         {
             _listingDal = listingDal;
         }
-        public void Add(Listing entity)
+
+        [ValidationAspect(typeof(ListingValidator))]
+        public IResult Add(Listing entity)
         {
+            entity.ListingId = GenerateListingId(entity);
             _listingDal.Add(entity);
+            return new SuccessResult();
         }
 
-        public void Delete(Listing entity)
+        public IResult Delete(Listing entity)
         {
             _listingDal.Delete(entity);
+            return new SuccessResult();
         }
 
-        public List<Listing> GetAll()
+        public IDataResult<List<Listing>> GetAll()
         {
-            return _listingDal.GetAll();
+            return new SuccessDataResult<List<Listing>>(_listingDal.GetAll());
+            
         }
 
-        public Listing GetById(int id)
+        public IDataResult<Listing> GetById(int id)
         {
-            return _listingDal.Get(l => l.ListingId==id);
+            return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id));
         }
 
-        public void Update(Listing entity)
+        [ValidationAspect(typeof(ListingValidator))]
+        public IResult Update(Listing entity)
         {
             _listingDal.Update(entity);
+            return new SuccessResult();
+        }
+
+        private int GenerateListingId(Listing item)
+        {
+            // Belirtilen formata göre ListingId oluşturmak için bu metodu kullanabilirsiniz
+            // Örneğin, bileşenleri birleştirme ve otomatik artan bir dizi numarası ekleyebilirsiniz
+            string listingIdString = $"{item.ListingTypeId:D1}{item.CityId:D3}{item.DistrictId:D3}{GetNextSequenceNumber():D3}";
+            return int.Parse(listingIdString);
+        }
+
+        private int GetNextSequenceNumber()
+        {
+            // Veritabanından veya başka bir depolama mekanizmasından bir sonraki dizi numarasını almak için bu metodu uygulamanız gerekmektedir
+            // Örneğin, mevcut maksimum dizi numarasını sorgulama ve artırma
+            int result = _listingDal.GetAll().Count + 1;
+            return result; // Bu kısmı kendiniz uygulamanız gerekmektedir
         }
     }
 }

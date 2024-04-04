@@ -32,10 +32,10 @@ ListingManager listingManager = new ListingManager(new EfListingDal());
 //item.Title = "Title";
 //item.Description = "Description";
 
-listingManager.Update(new Listing
-{
-    ListingId = 1,
-    Description = "Description Test",
-});
+//listingManager.Update(new Listing
+//{
+//    ListingId = 1,
+//    Description = "Description Test",
+//});
 
-Console.WriteLine(listingManager.GetById(1).Description);
+//Console.WriteLine(listingManager.GetById(1).Data.Description);

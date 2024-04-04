@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests;
-using Business.Entities.Requests;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -8,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.Aspects.Autofac.Caching.CacheAspect;
 
 namespace Business.Concrete
 {
@@ -21,19 +25,28 @@ namespace Business.Concrete
             _listingService = listingService;
         }
 
-        public void Add(CreateHouseListingDto entity)
+        [ValidationAspect(typeof(HouseListing))]
+        public void AddHouseListing(HouseListing houseListing)
+        {
+            _houseListingDal.Add(houseListing);
+        }
+
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IHouseListingService.Get")]
+        public IResult Add(CreateHouseListingReq req)
         {
 
             var listingToAdd = new Listing
             {
-                CityId = entity.CityId,
-                Description = entity.Description,
-                Price = entity.Price,
-                DistrictId = entity.DistrictId,
-                Date = entity.Date,
-                SquareMeter = entity.SquareMeter,
-                Title = entity.Title,
-                UserId = entity.UserId,
+                ListingTypeId = req.ListingTypeId,
+                CityId = req.CityId,
+                Description = req.Description,
+                Price = req.Price,
+                DistrictId = req.DistrictId,
+                Date = req.Date,
+                SquareMeter = req.SquareMeter,
+                Title = req.Title,
+                UserId = req.UserId,
             };
             
             _listingService.Add(listingToAdd);
@@ -42,49 +55,110 @@ namespace Business.Concrete
 
             var houseListingToAdd = new HouseListing
             {
-                HasGarden = entity.HasGarden,
-                HasFurniture = entity.HasFurniture,
-                HasElevator = entity.HasElevator,
-                HasBalcony = entity.HasBalcony,
-                FloorCount = entity.FloorCount,
-                Address = entity.Address,
-                BathroomCount = entity.BathroomCount,
-                BuildingAge = entity.BuildingAge,
-                CurrentFloor = entity.CurrentFloor,
-                HasParking = entity.HasParking,
-                IsInGatedCommunity = entity.IsInGatedCommunity,
+                HasGarden = req.HasGarden,
+                HasFurniture = req.HasFurniture,
+                HasElevator = req.HasElevator,
+                HasBalcony = req.HasBalcony,
+                FloorCount = req.FloorCount,
+                Address = req.Address,
+                BathroomCount = req.BathroomCount,
+                BuildingAge = req.BuildingAge,
+                CurrentFloor = req.CurrentFloor,
+                HasParking = req.HasParking,
+                IsInGatedCommunity = req.IsInGatedCommunity,
                 ListingId = id,
-                LivingRoomCount = entity.LivingRoomCount,
-                RoomCount = entity.RoomCount,
-                TypeId = entity.TypeId,
+                LivingRoomCount = req.LivingRoomCount,
+                RoomCount = req.RoomCount,
+                TypeId = req.TypeId,
 
             };
 
-            this.Add(houseListingToAdd);
+            this.AddHouseListing(houseListingToAdd);
+            return new SuccessResult();
         }
 
-        public void Add(HouseListing entity)
+        [CacheRemoveAspect("IHouseListingService.Get")]
+        public IResult Delete(DeleteHouseListingReq req)
         {
-            _houseListingDal.Add(entity);
+            var houseListingToDelete = _houseListingDal.Get(hl => hl.HouseListingId == req.HouseListingId);
+
+            _houseListingDal.Delete(houseListingToDelete);
+
+            var listingToDelete = _listingService.GetById(houseListingToDelete.ListingId).Data;
+
+            _listingService.Delete(listingToDelete);
+
+            return new SuccessResult();
+            
         }
 
-        public void Delete(HouseListing entity)
+
+        [CacheAspect(10)]
+        public IDataResult<List<HouseListing>> GetAll()
         {
-            _houseListingDal.Delete(entity);
-        }
-        public List<HouseListing> GetAll()
-        {
-            return _houseListingDal.GetAll();
+            return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll());
         }
 
-        public HouseListing GetById(int id)
+        [CacheAspect(10)]
+        public IDataResult<HouseListing> GetById(int id)
         {
-             return _houseListingDal.Get(hl=>hl.HouseListingId==id); ;
+             return new SuccessDataResult<HouseListing>(_houseListingDal.Get(hl=>hl.HouseListingId==id)) ;
         }
 
-        public void Update(HouseListing entity)
+
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IHouseListingService.Get")]
+        public IResult Update(UpdateHouseListingReq req)
         {
-            _houseListingDal.Update(entity);
+            var listingId = _houseListingDal.Get(hl=>hl.HouseListingId == req.HouseListingId).ListingId;
+
+            var houseListingToUpdate = new HouseListing()
+            {
+                HouseListingId = req.HouseListingId,
+                HasGarden = req.HasGarden,
+                HasFurniture = req.HasFurniture,
+                HasElevator = req.HasElevator,
+                HasBalcony = req.HasBalcony,
+                FloorCount = req.FloorCount,
+                Address = req.Address,
+                BathroomCount = req.BathroomCount,
+                BuildingAge = req.BuildingAge,
+                CurrentFloor = req.CurrentFloor,
+                HasParking = req.HasParking,
+                IsInGatedCommunity = req.IsInGatedCommunity,
+                ListingId = listingId,
+                LivingRoomCount = req.LivingRoomCount,
+                RoomCount = req.RoomCount,
+                TypeId = req.TypeId,
+            };
+
+            this.UpdateHouseListing(houseListingToUpdate);
+
+            var listingToUpdate = new Listing()
+            {
+                CityId = req.CityId,
+                Date = req.Date,
+                Description = req.Description,
+                DistrictId = req.DistrictId,
+                ListingId = listingId,
+                ListingTypeId = req.ListingTypeId,
+                Price = req.Price,
+                SquareMeter = req.SquareMeter,
+                Status = req.Status,
+                Title = req.Title,
+                UserId = req.UserId
+            };
+
+            _listingService.Update(listingToUpdate);
+
+            return new SuccessResult();
         }
+
+        [ValidationAspect(typeof(HouseListing))]
+        public void UpdateHouseListing(HouseListing houseListing)
+        {
+            _houseListingDal.Update(houseListing);
+        }
+
     }
 }

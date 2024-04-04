@@ -18,12 +18,20 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result = _listingService.GetAll();
-            return Ok(result);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
         [HttpGet("getbyid")]
         public IActionResult GetById(int id) {
             var result = _listingService.GetById(id);
-            return Ok(result);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
