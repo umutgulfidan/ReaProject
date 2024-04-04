@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Entities.Requests;
+using Business.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -18,14 +18,43 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result = _houseListingService.GetAll();
-            return Ok(result);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPost("add")]
-        public IActionResult Add(AddHouseListingReq req)
+        public IActionResult Add(CreateHouseListingReq req)
         {
-            _houseListingService.Add(req);
-            return Ok();
+            var result = _houseListingService.Add(req);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("delete")]
+        public IActionResult Delete(DeleteHouseListingReq req)
+        {
+            var result = _houseListingService.Delete(req);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
+        }
+        [HttpPost("update")]
+        public IActionResult Update(UpdateHouseListingReq req)
+        {
+            var result = _houseListingService.Update(req);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

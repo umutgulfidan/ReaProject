@@ -1,4 +1,5 @@
 ﻿using Business.Dtos.Requests;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,13 @@ namespace Business.Abstract
 {
     public interface IHouseListingService
     {
-        void Add(HouseListing entity);
-        void Add(CreateHouseListingDto req);
-        void Delete(HouseListing entity);
-        void Update(HouseListing entity);
-        HouseListing GetById(int id);
-        List<HouseListing> GetAll();
+        void AddHouseListing(HouseListing houseListing);
+        IResult Add(CreateHouseListingReq req);
+        IResult Delete(DeleteHouseListingReq req);
+        IResult Update(UpdateHouseListingReq req);
+
+        void UpdateHouseListing(HouseListing houseListing);
+        IDataResult<HouseListing> GetById(int id);
+        IDataResult<List<HouseListing>> GetAll();
     }
 }
