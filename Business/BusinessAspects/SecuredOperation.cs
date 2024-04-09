@@ -39,13 +39,13 @@ namespace Business.BusinessAspects
 
             if (_performUserIdCheck)
             {
-                var userIdClaims = _httpContextAccessor.HttpContext.User.ClaimUserId();
-                if (userIdClaims == null || userIdClaims.Count == 0 || !int.TryParse(userIdClaims[0], out int userIdFromToken))
+                var userId = _httpContextAccessor.HttpContext.User.ClaimUserId();
+                if (userId == null || userId == 0)
                 {
                     throw new Exception(Messages.AuthorizationDenied);
                 }
 
-                if (!IsUserAuthorizedForOperation(invocation, userIdFromToken))
+                if (!IsUserAuthorizedForOperation(invocation, userId))
                 {
                     throw new Exception(Messages.AuthorizationDenied);
                 }

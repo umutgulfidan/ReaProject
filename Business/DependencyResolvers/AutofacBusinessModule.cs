@@ -26,8 +26,24 @@ namespace Business.DependencyResolvers
             builder.RegisterType<HouseListingManager>().As<IHouseListingService>().SingleInstance();
             builder.RegisterType<EfHouseListingDal>().As<IHouseListingDal>().SingleInstance();
 
+            builder.RegisterType<ListingTypeManager>().As<IListingTypeService>().SingleInstance();
+            builder.RegisterType<EfListingTypeDal>().As<IListingTypeDal>().SingleInstance();
+
+
+            builder.RegisterType<HouseTypeManager>().As<IHouseTypeService>().SingleInstance();
+            builder.RegisterType<EfHouseTypeDal>().As<IHouseTypeDal>().SingleInstance();
+
+
             builder.RegisterType<ListingImageManager>().As<IListingImageService>().SingleInstance();
             builder.RegisterType<EfListingImageDal>().As<IListingImageDal>().SingleInstance();
+
+            builder.RegisterType<CityManager>().As<ICityService>().SingleInstance();
+            builder.RegisterType<EfCityDal>().As<ICityDal>().SingleInstance();
+
+            builder.RegisterType<DistrictManager>().As<IDistrictService>().SingleInstance();
+            builder.RegisterType<EfDistrictDal>().As<IDistrictDal>().SingleInstance();
+
+
 
             builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
 

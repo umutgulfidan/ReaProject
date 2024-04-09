@@ -1,38 +1,43 @@
 ﻿using Business.Abstract;
-using Business.Dtos.Requests;
-using Core.Extensions.Claims;
+using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HouseListingsController : ControllerBase
+    public class CitiesController : ControllerBase
     {
-        IHouseListingService _houseListingService;
-        public HouseListingsController(IHouseListingService houseListingService)
+        ICityService _cityService;
+        public CitiesController(ICityService cityService)
         {
-            _houseListingService = houseListingService;
+            _cityService = cityService;
         }
-
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _houseListingService.GetAll();
+            var result = _cityService.GetAll();
             if(result.IsSuccess)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-
-        [HttpPost("add")]
-        public IActionResult Add(CreateHouseListingReq req)
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
         {
-            var userId = HttpContext.User.ClaimUserId();
-            req.UserId = userId;
-
-            var result = _houseListingService.Add(req);
+            var result = _cityService.GetById(id);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("add")]
+        public IActionResult Add(City city)
+        {
+            var result = _cityService.Add(city);
             if(result.IsSuccess)
             {
                 return Ok(result);
@@ -40,24 +45,20 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpPost("delete")]
-        public IActionResult Delete(DeleteHouseListingReq req)
+        public IActionResult Delete(City city)
         {
-
-            var result = _houseListingService.Delete(req);
+            var result = _cityService.Delete(city);
             if (result.IsSuccess)
             {
                 return Ok(result);
             }
             return BadRequest(result);
-
         }
-        [HttpPost("update")]
-        public IActionResult Update(UpdateHouseListingReq req)
-        {
-            var userId = HttpContext.User.ClaimUserId();
-            req.UserId = userId;
 
-            var result = _houseListingService.Update(req);
+        [HttpPost("update")]
+        public IActionResult Update(City city)
+        {
+            var result = _cityService.Update(city);
             if (result.IsSuccess)
             {
                 return Ok(result);
