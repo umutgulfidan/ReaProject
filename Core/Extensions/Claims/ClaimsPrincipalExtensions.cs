@@ -20,9 +20,10 @@ namespace Core.Extensions.Claims
             return claimsPrincipal?.Claims(ClaimTypes.Role);
         }
 
-        public static List<string> ClaimUserId(this ClaimsPrincipal claimsPrincipal)
+        public static int ClaimUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            return claimsPrincipal?.Claims(ClaimTypes.NameIdentifier);
+            var userId = claimsPrincipal?.Claims(ClaimTypes.NameIdentifier);
+            return Convert.ToInt32(userId[0]);
         }
     }
 }
