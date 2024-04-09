@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects;
 using Business.Dtos.Requests;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
@@ -92,7 +93,7 @@ namespace Business.Concrete
             
         }
 
-
+        [SecuredOperation("admin,moderator")]
         [CacheAspect(10)]
         public IDataResult<List<HouseListing>> GetAll()
         {

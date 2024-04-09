@@ -13,6 +13,6 @@ namespace Entities.Concrete
         public int ListingId { get; set; }
         public string ImagePath { get; set; }
         public DateTime Date { get; set; }
-        public bool? Status { get; set; }
+        public bool? Status { get; set; } = true;
     }
 }
