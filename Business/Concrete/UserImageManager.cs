@@ -23,6 +23,7 @@ namespace Business.Concrete
             _userImageDal = userImageDal;
             _fileHelper = fileHelper;
         }
+
         public IResult Add(IFormFile file, CreateUserImageReq req)
         {
             UserImage userImage = new UserImage();
@@ -43,6 +44,16 @@ namespace Business.Concrete
             _userImageDal.Delete(userImage);
 
             return new SuccessResult();
+        }
+
+        public IDataResult<List<UserImage>> GetAll()
+        {
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll());
+        }
+
+        public IDataResult<List<UserImage>> GetAllByUserId(int userId)
+        {
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.UserId==userId));
         }
 
         public IResult Update(IFormFile formFile, UserImage userImage)
