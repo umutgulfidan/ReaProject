@@ -44,6 +44,16 @@ namespace Business.DependencyResolvers
             builder.RegisterType<EfDistrictDal>().As<IDistrictDal>().SingleInstance();
 
 
+            builder.RegisterType<EfOperationClaimDal>().As<IOperationClaimDal>().SingleInstance();
+            builder.RegisterType<OperationClaimManager>().As<IOperationClaimService>().SingleInstance();
+
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>().SingleInstance();
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>().SingleInstance();
+
+            builder.RegisterType<EfUserImageDal>().As<IUserImageDal>().SingleInstance();
+            builder.RegisterType<UserImageManager>().As<IUserImageService>().SingleInstance();
+
+
 
             builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
 
