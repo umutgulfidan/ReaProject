@@ -4,6 +4,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,12 @@ namespace Business.Concrete
         public IDataResult<Listing> GetById(int id)
         {
             return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id));
+        }
+
+        public IDataResult<List<ListingDetailDto>> GetListingDetails()
+        {
+            return new SuccessDataResult<List<ListingDetailDto>>(_listingDal.GetListingDetails());
+
         }
 
         [ValidationAspect(typeof(ListingValidator))]
