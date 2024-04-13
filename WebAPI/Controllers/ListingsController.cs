@@ -24,6 +24,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("getalldetails")]
+        public IActionResult GetAllDetails()
+        {
+            var result = _listingService.GetListingDetails();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getbyid")]
         public IActionResult GetById(int id) {
             var result = _listingService.GetById(id);
