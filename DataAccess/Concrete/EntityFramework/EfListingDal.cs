@@ -16,7 +16,7 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfListingDal : EfRepositoryBase<ReaContext, Listing>, IListingDal
     {
-        public List<ListingDetailDto> GetListingDetails()
+        public List<ListingDto> GetListingDetails()
         {
             using (ReaContext context = new ReaContext())
             {
@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.EntityFramework
                                   .Take(1)
                                   .DefaultIfEmpty() on listing.ListingId equals image.ListingId into images
                               from image in images.DefaultIfEmpty()
-                              select new ListingDetailDto
+                              select new ListingDto
                               {
                                   Id = listing.ListingId,
                                   CityName = city.CityName,

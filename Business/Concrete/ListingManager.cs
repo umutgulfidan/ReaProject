@@ -46,9 +46,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id));
         }
 
-        public IDataResult<List<ListingDetailDto>> GetListingDetails()
+        public IDataResult<List<ListingDto>> GetListingDetails()
         {
-            return new SuccessDataResult<List<ListingDetailDto>>(_listingDal.GetListingDetails());
+            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingDetails());
 
         }
 
@@ -63,7 +63,7 @@ namespace Business.Concrete
         {
             // Belirtilen formata göre ListingId oluşturmak için bu metodu kullanabilirsiniz
             // Örneğin, bileşenleri birleştirme ve otomatik artan bir dizi numarası ekleyebilirsiniz
-            string listingIdString = $"{item.ListingTypeId:D1}{item.CityId:D3}{item.DistrictId:D3}{GetNextSequenceNumber():D3}";
+            string listingIdString = $"{item.PropertyTypeId:D1}{item.ListingTypeId:D1}{item.CityId:D2}{GetNextSequenceNumber():D4}";
             return int.Parse(listingIdString);
         }
 

@@ -17,7 +17,7 @@ namespace Business.Abstract
         IResult Update(Listing entity);
         IDataResult<Listing> GetById(int id);
         IDataResult<List<Listing>> GetAll();
-        IDataResult<List<ListingDetailDto>> GetListingDetails();
+        IDataResult<List<ListingDto>> GetListingDetails();
 
     }
 }

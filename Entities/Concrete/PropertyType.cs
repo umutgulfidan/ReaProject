@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DTOs
+namespace Entities.Concrete
 {
-    public class HouseListingDetailDto : IDto
+    public class PropertyType : IEntity
     {
-
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

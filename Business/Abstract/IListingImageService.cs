@@ -12,7 +12,7 @@ namespace Business.Abstract
 {
     public interface IListingImageService
     {
-        IResult Add(IFormFile file, CreateListingImageReq listingImageReq);
+        IResult Add(IFormFile file, CreateListingImageReq listingImageReq,int userIdentifier);
         IResult Update(IFormFile file, ListingImage listingImageReq);
         IResult Delete(DeleteListingImageReq listingImageReq);
         IResult DeleteAllByListingId(int listingId);
