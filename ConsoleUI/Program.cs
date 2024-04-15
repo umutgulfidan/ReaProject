@@ -3,26 +3,26 @@ using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 
-ListingManager listingManager = new ListingManager(new EfListingDal());
-listingManager.Add(new Listing
-{
-    Date = DateTime.Now,
-    Description = "Console Test",
-    CityId = 34,
-    DistrictId = 1,
-   Price = 10000,
-    SquareMeter = 122,
-    Title = "Doktordan Tertemiz Müstakil",
-    UserId = 1,
-});
+//ListingManager listingManager = new ListingManager(new EfListingDal());
+//listingManager.Add(new Listing
+//{
+//    Date = DateTime.Now,
+//    Description = "Console Test",
+//    CityId = 34,
+//    DistrictId = 1,
+//   Price = 10000,
+//    SquareMeter = 122,
+//    Title = "Doktordan Tertemiz Müstakil",
+//    UserId = 1,
+//});
 
-List<Listing> liste = listingManager.GetAll();
-foreach (var item in liste)
-{
-    Console.WriteLine(item.lis);
-   Console.WriteLine(item.Title);
-   Console.WriteLine(item.UserId);
-}
+//List<Listing> liste = listingManager.GetAll();
+//foreach (var item in liste)
+//{
+//    Console.WriteLine(item.lis);
+//   Console.WriteLine(item.Title);
+//   Console.WriteLine(item.UserId);
+//}
 
 //Listing item = listingManager.GetById(1);
 //Console.WriteLine(item.Title);

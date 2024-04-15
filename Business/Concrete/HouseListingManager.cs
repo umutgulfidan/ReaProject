@@ -7,6 +7,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,5 +164,9 @@ namespace Business.Concrete
             _houseListingDal.Update(houseListing);
         }
 
+        public IDataResult<List<HouseListingDto>> GetHouseListingDtos()
+        {
+            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings());
+        }
     }
 }
