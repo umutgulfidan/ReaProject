@@ -41,6 +41,7 @@ namespace Business.Concrete
             var listingToAdd = new Listing
             {
                 ListingTypeId = req.ListingTypeId,
+                PropertyTypeId = req.PropertyTypeId,
                 CityId = req.CityId,
                 Description = req.Description,
                 Price = req.Price,

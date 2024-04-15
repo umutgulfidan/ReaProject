@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests.ListingImageReq;
+using Core.Extensions.Claims;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromForm] IFormFile file, [FromForm] CreateListingImageReq listingImageReq)
         {
-            var result = _listingImageService.Add(file, listingImageReq);
+            var userId = HttpContext.User.ClaimUserId();
+            var result = _listingImageService.Add(file, listingImageReq,userId);
             if(result.IsSuccess)
             {
                 return Ok(result);

@@ -18,6 +18,7 @@ namespace DataAccess.Concrete.EntityFramework
 
         public DbSet<Listing> Listings { get; set; }
         public DbSet<ListingType> ListingTypes { get; set; }
+        public DbSet<PropertyType> PropertyTypes { get; set; }
         public DbSet<HouseListing> HouseListings { get; set; }
         public DbSet<ListingImage> ListingImages { get; set; }
         public DbSet<City> Cities { get; set; }

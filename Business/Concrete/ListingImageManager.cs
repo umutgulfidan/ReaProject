@@ -16,15 +16,30 @@ namespace Business.Concrete
 {
     public class ListingImageManager : IListingImageService
     {
+        IListingDal _listingDal;
         IListingImageDal _listingImageDal;
         IFileHelper _fileHelper;
-        public ListingImageManager(IListingImageDal listingImageDal,IFileHelper fileHelper)
+        public ListingImageManager(IListingImageDal listingImageDal,IListingDal listingDal,IFileHelper fileHelper)
         {
             _listingImageDal = listingImageDal;
+            _listingDal = listingDal;
             _fileHelper = fileHelper;
         }
-        public IResult Add(IFormFile file, CreateListingImageReq listingImageReq)
+        public IResult Add(IFormFile file, CreateListingImageReq listingImageReq,int currentUserIdentifier)
         {
+            // İlk olarak, ListingId'yi kullanarak ilgili ilanı yükleyen kullanıcıyı elde edelim.
+            var listing = _listingDal.Get(li=>li.ListingId == listingImageReq.ListingId);
+            if (listing == null)
+            {
+                return new ErrorResult("Listing not found.");
+            }
+
+            // Yükleyen kişinin UserId'si ile token'daki currentUserIdentifier'ı karşılaştıralım.
+            if (listing.UserId != currentUserIdentifier)
+            {
+                return new ErrorResult("You are not authorized to add images to this listing.");
+            }
+
             ListingImage listingImage = new ListingImage();
             listingImage.ListingId = listingImageReq.ListingId;
             listingImage.ImagePath = _fileHelper.Upload(file, PathConstants.ListingImagePath);

@@ -11,7 +11,8 @@ namespace Business.Dtos.Requests
     {
         public int UserId { get; set; }
         public int CityId { get; set; }
-        public int ListingTypeId { get; set; } = 1;
+        public int ListingTypeId { get; set; }
+        public int PropertyTypeId { get; set; } = 1;
         public int DistrictId { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
