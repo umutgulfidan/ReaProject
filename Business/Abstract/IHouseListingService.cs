@@ -1,6 +1,7 @@
 ﻿using Business.Dtos.Requests;
 using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace Business.Abstract
         void UpdateHouseListing(HouseListing houseListing);
         IDataResult<HouseListing> GetById(int id);
         IDataResult<List<HouseListing>> GetAll();
+        IDataResult<List<HouseListingDto>> GetHouseListingDtos();
     }
 }
