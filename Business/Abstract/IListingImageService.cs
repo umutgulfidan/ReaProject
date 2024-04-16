@@ -18,5 +18,6 @@ namespace Business.Abstract
         IResult DeleteAllByListingId(int listingId);
 
         IDataResult<List<ListingImage>> GetAll();
+        IDataResult<List<ListingImage>> GetByListingId(int listingId);
     }
 }

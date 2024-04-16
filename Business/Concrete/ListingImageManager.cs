@@ -73,6 +73,11 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public IDataResult<List<ListingImage>> GetByListingId(int listingId)
+        {
+            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.ListingId==listingId));
+        }
+
         public IDataResult<List<ListingImage>> GetAll()
         {
             return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll());
