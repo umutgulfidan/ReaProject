@@ -25,7 +25,8 @@ namespace DataAccess.Concrete.EntityFramework
                 var result = (from listing in context.Listings
                               join city in context.Cities on listing.CityId equals city.Id
                               join district in context.Districts on listing.DistrictId equals district.Id
-                              join type in context.ListingTypes on listing.ListingTypeId equals type.Id
+                              join listingType in context.ListingTypes on listing.ListingTypeId equals listingType.Id
+                              join propertyType in context.PropertyTypes on listing.PropertyTypeId equals propertyType.Id
                               join image in context.ListingImages
                                   .OrderBy(img => img.Id)
                                   .Take(1)
@@ -41,9 +42,10 @@ namespace DataAccess.Concrete.EntityFramework
                                   Price = listing.Price,
                                   SquareMeter = listing.SquareMeter,
                                   Title = listing.Title,
-                                  TypeName = type.ListingTypeName,
+                                  ListingTypeName = listingType.ListingTypeName,
+                                  PropertyTypeName = propertyType.Name,
                                   ImagePath = image != null ? image.ImagePath : defaultImagePath
-                              }).ToList(); // ToList() metodu ile sorguyu bir liste olarak döndürün
+                              }).OrderByDescending(dto => dto.Date).ToList(); // ToList() metodu ile sorguyu bir liste olarak döndürün
 
                 return result; // result değişkenini dönün
             }

@@ -22,6 +22,7 @@ namespace Entities.DTOs
         public string CityName { get; set; }
         public string DistrictName { get; set; }
         public string ImagePath { get; set; }
+        public DateTime? Date { get; set; }
 
     }
 }
