@@ -27,6 +27,17 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("getbylistingid")]
+        public IActionResult GetByListingId(int listingId)
+        {
+            var result = _listingImageService.GetByListingId(listingId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpPost("add")]
         public IActionResult Add([FromForm] IFormFile file, [FromForm] CreateListingImageReq listingImageReq)
         {
