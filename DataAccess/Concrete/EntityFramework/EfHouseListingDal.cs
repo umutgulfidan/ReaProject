@@ -46,10 +46,11 @@ namespace DataAccess.Concrete.EntityFramework
                                   LivingRoomCount = houseListing.LivingRoomCount,
                                   HouseTypeName = houseType.Name,
                                   ListingTypeName = listingType.ListingTypeName,
-                                  RoomCount = houseListing.RoomCount,                  
-                                  ImagePath = image != null ? image.ImagePath : defaultImagePath
+                                  RoomCount = houseListing.RoomCount,
+                                  ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                                  Date = listing.Date
                               }
-                              ).ToList();
+                              ).OrderByDescending(dto => dto.Date).ToList();
 
                 return result;
             }

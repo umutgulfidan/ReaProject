@@ -14,7 +14,8 @@ namespace Entities.DTOs
         public string Description { get; set; }
         public string CityName { get; set; }
         public string DistrictName { get; set; }
-        public string TypeName { get; set; }
+        public string ListingTypeName { get; set; }
+        public string PropertyTypeName { get; set; }
         public decimal Price { get; set; }
         public DateTime? Date { get; set; }
         public int SquareMeter { get; set; }
