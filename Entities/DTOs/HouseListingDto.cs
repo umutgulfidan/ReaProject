@@ -9,6 +9,7 @@ namespace Entities.DTOs
 {
     public class HouseListingDto : IDto
     {
+        //
         public int Id { get; set; }
         public int ListingId { get; set; }
         public string HouseTypeName { get; set; }
@@ -23,6 +24,15 @@ namespace Entities.DTOs
         public string DistrictName { get; set; }
         public string ImagePath { get; set; }
         public DateTime? Date { get; set; }
+
+        public int BuildingAge { get; set; }
+        public bool HasGarden { get; set; }
+        public bool HasElevator { get; set; }
+        public bool HasFurniture { get; set; }
+        public bool HasParking { get; set; }
+        public bool HasBalcony { get; set; }
+        public bool IsInGatedCommunity { get; set; }
+
 
     }
 }

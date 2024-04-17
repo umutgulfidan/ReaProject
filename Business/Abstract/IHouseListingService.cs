@@ -22,5 +22,7 @@ namespace Business.Abstract
         IDataResult<List<HouseListing>> GetAll();
         IDataResult<List<HouseListingDto>> GetHouseListingDtos();
         IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId);
+
+        IDataResult<List<HouseListingDto>> GetAllByFilter(HouseFilterObject filter);
     }
 }
