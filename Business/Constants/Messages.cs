@@ -8,6 +8,11 @@ namespace Business.Constants
 {
     public static class Messages
     {
+        //Listing
+        public static string ListingAdded = "İlan Başarıyla Eklendi";
+        public static string ListingListed = "İlanlar Başarıyla Listelendi";
+
+
 
         //User
 
