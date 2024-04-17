@@ -168,5 +168,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings());
         }
+
+        public IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId)
+        {
+            return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId));
+        }
     }
 }
