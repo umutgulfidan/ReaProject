@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class CityValidator : AbstractValidator<City>
+    public class HouseTypeValidator : AbstractValidator<HouseType>
     {
-        public CityValidator()
+        public HouseTypeValidator()
         {
-            RuleFor(c => c.CityName).NotEmpty();
-            RuleFor(c=>c.CityName).MaximumLength(50);
-            RuleFor(c=>c.CityName).MinimumLength(2);
-            RuleFor(c=>c.CityName).Must(IsLetter);
+            RuleFor(ht => ht.Name).NotEmpty();
+            RuleFor(ht => ht.Name).MinimumLength(1);
+            RuleFor(ht=>ht.Name).MaximumLength(50);
+            RuleFor(ht=>ht.Name).Must(IsLetter);
         }
 
         private bool IsLetter(string arg)
