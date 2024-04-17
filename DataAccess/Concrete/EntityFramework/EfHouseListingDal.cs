@@ -125,7 +125,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 //District
                                 DistrictName = district.DistrictName,
                                 //Listing
-                                ListingId = listingType.Id,
+                                ListingId = listing.ListingId,
                                 Title = listing.Title,
                                 Description = listing.Description,
                                 Date = listing.Date,
