@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests;
 using Core.Extensions.Claims;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -78,6 +79,16 @@ namespace WebAPI.Controllers
             req.UserId = userId;
 
             var result = _houseListingService.Update(req);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getallbyfilter")]
+        public IActionResult GetAllByFilter(HouseFilterObject filter)
+        {
+            var result = _houseListingService.GetAllByFilter(filter);
             if (result.IsSuccess)
             {
                 return Ok(result);

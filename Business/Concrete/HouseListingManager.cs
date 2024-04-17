@@ -8,6 +8,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,6 +173,12 @@ namespace Business.Concrete
         public IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId)
         {
             return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId));
+        }
+
+        public IDataResult<List<HouseListingDto>> GetAllByFilter(HouseFilterObject filter)
+        {
+            var data = _houseListingDal.GetHouseListingsByFilter(filter);
+            return new SuccessDataResult<List<HouseListingDto>>(data);
         }
     }
 }
