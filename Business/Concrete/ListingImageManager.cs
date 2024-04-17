@@ -48,7 +48,7 @@ namespace Business.Concrete
 
             _listingImageDal.Add(listingImage);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingImageAdded);
         }
 
         public IResult Delete(DeleteListingImageReq listingImageReq)
@@ -58,7 +58,7 @@ namespace Business.Concrete
             _fileHelper.Delete(PathConstants.ListingImagePath+listingImage.ImagePath);
             _listingImageDal.Delete(listingImage);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingImageDeleted);
         }
 
         public IResult DeleteAllByListingId(int listingId)
@@ -70,24 +70,24 @@ namespace Business.Concrete
                 _fileHelper.Delete(PathConstants.ListingImagePath + item.ImagePath);
                 _listingImageDal.Delete(item);
             }
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingImageDeleted);
         }
 
         public IDataResult<List<ListingImage>> GetByListingId(int listingId)
         {
-            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.ListingId==listingId));
+            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.ListingId==listingId),Messages.ListingImageListed);
         }
 
         public IDataResult<List<ListingImage>> GetAll()
         {
-            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll());
+            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(),Messages.ListingImageListed);
         }
 
         public IResult Update(IFormFile file, ListingImage listingImage)
         {
             listingImage.ImagePath = _fileHelper.Update(file, PathConstants.ListingImagePath+listingImage.ImagePath,PathConstants.ListingImagePath);
             _listingImageDal.Update(listingImage);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingImageUpdated);
 
         }
     }

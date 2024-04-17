@@ -60,6 +60,48 @@ namespace Business.Constants
         public static string GetHouseListing= "Ev ilanları başarıyla getirildi";
         public static string GetHouseListingDetails = "Detaylar başarıyla getirildi";
 
+        //HouseType
+
+        public static string HouseTypeAdded = "Ev tipi başarıyla eklendi";
+        public static string HouseTypeDeleted = "Ev tipi başarıyla silindi";
+        public static string HouseTypeUpdated = "Ev tipleri başarıyla güncellendi";
+        public static string HouseTypeListed = "Ev tipleri başarıyla listelendi";
+
+        //ListingImage
+
+        public static string ListingImageAdded = "İlan resmi başarıyla eklendi";
+        public static string ListingImageDeleted = "İlan resmi başarıyla silindi";
+        public static string ListingImageUpdated = "İlan resmi başarıyla güncellendi";
+        public static string ListingImageListed = "İlan resimleri başarıyla listelendi";
+
+        //ListingType
+
+        public static string ListingTypeAdded = "İlan tipi başarıyla eklendi";
+        public static string ListingTypeDeleted = "İlan tipi başarıyla silindi";
+        public static string ListingTypeUpdated = "İlan tipi başarıyla güncellendi";
+        public static string ListingTypeListed = "İlan tipi başarıyla listelendi";
+
+        //OperationClaim
+
+        public static string OperationClaimAdded = "Rol başarıyla eklendi";
+        public static string OperationClaimDeleted = "Rol başarıyla silindi";
+        public static string OperationClaimUpdated = "Rol başarıyla güncellendi";
+        public static string OperationClaimListed = "Roller başarıyla listelendi";
+
+        //UserImage
+
+        public static string UserImageAdded = "Kullanıcı resmi başarıyla eklendi";
+        public static string UserImageDeleted = "Kullanıcı resmi başarıyla silindi";
+        public static string UserImageUpdated = "Kullanıcı resmi başarıyla güncellendi";
+        public static string UserImageListed = "Kullanıcı resimleri başarıyla listelendi";
+
+        //UserOperationClaim
+
+        public static string UserOperationClaimAdded = "Yetki başarıyla verildi";
+        public static string UserOperationClaimDeleted = "Yetki başarıyla alındı";
+        public static string UserOperationClaimUpdated = "Yetki başarıyla güncellendi";
+        public static string UserOperationClaimListed = "Yetkiler başarıyla listelendi";
+
 
     }
 }

@@ -5,6 +5,7 @@ using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using FluentValidation.Internal;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Business.Concrete
             userImage.ImagePath = _fileHelper.Upload(file,PathConstants.UserImagePath);
 
             _userImageDal.Add(userImage);
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserImageAdded);
         }
         public IResult Delete(DeleteUserImageReq req) 
         {
@@ -43,24 +44,24 @@ namespace Business.Concrete
             _fileHelper.Delete(PathConstants.UserImagePath+userImage.ImagePath);
             _userImageDal.Delete(userImage);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserImageDeleted);
         }
 
         public IDataResult<List<UserImage>> GetAll()
         {
-            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll());
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(),Messages.UserImageListed);
         }
 
         public IDataResult<List<UserImage>> GetAllByUserId(int userId)
         {
-            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.UserId==userId));
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.UserId==userId),Messages.UserImageListed);
         }
 
         public IResult Update(IFormFile formFile, UserImage userImage)
         {
             userImage.ImagePath = _fileHelper.Update(formFile,PathConstants.UserImagePath+userImage.ImagePath,PathConstants.UserImagePath);
             _userImageDal.Update(userImage);
-            return new SuccessResult();
+            return new SuccessResult(Messages.UserImageUpdated);
 
         }
     }
