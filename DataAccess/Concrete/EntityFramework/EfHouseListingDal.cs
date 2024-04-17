@@ -88,5 +88,63 @@ namespace DataAccess.Concrete.EntityFramework
                 return result;
             }
         }
+
+
+        public HouseListingDetailDto GetHouseListingDetails(int listingId)
+        {
+            using(ReaContext context = new ReaContext()) {
+
+                var query = from houseListing in context.HouseListings
+                            join listing in context.Listings on houseListing.ListingId equals listing.ListingId
+                            join city in context.Cities on listing.CityId equals city.Id
+                            join district in context.Districts on listing.DistrictId equals district.Id
+                            join houseType in context.HouseTypes on houseListing.TypeId equals houseType.Id
+                            join listingType in context.ListingTypes on listing.ListingTypeId equals listingType.Id
+                            join user in context.Users on listing.UserId equals user.Id
+
+                            where listing.ListingId == listingId
+                            select new HouseListingDetailDto
+                            {
+                                //HouseListing
+                                Id = houseListing.HouseListingId,
+                                RoomCount = houseListing.RoomCount,
+                                BathroomCount = houseListing.BathroomCount,
+                                LivingRoomCount = houseListing.LivingRoomCount,
+                                FloorCount = houseListing.FloorCount,
+                                CurrentFloor = houseListing.CurrentFloor,
+                                HasGarden = houseListing.HasGarden,
+                                HasBalcony = houseListing.HasBalcony,
+                                HasElevator = houseListing.HasElevator,
+                                HasFurniture = houseListing.HasFurniture,
+                                HasParking = houseListing.HasParking,
+                                IsInGatedCommunity = houseListing.IsInGatedCommunity,
+                                BuildingAge = houseListing.BuildingAge,
+                                Address = houseListing.Address,
+                                //City
+                                CityName = city.CityName,
+                                //District
+                                DistrictName = district.DistrictName,
+                                //Listing
+                                ListingId = listingType.Id,
+                                Title = listing.Title,
+                                Description = listing.Description,
+                                Date = listing.Date,
+                                Price = listing.Price,
+                                //User
+                                FirstName =user.FirstName,
+                                LastName =user.LastName,
+                                UserEmail = user.Email,
+                                //ListingType
+                                ListingTypeName=listingType.ListingTypeName,
+                                //HouseType
+                                HouseTypeName = houseType.Name
+                            };
+
+                return query.First();
+            }
+
+
+
+        }
     }
 }

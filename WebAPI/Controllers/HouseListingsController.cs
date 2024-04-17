@@ -35,6 +35,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getdetails")]
+        public IActionResult GetHouseListings(int listingId)
+        {
+            var result = _houseListingService.GetHouseListingDetail(listingId);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpPost("add")]
         public IActionResult Add(CreateHouseListingReq req)

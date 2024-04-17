@@ -12,5 +12,6 @@ namespace DataAccess.Abstract
     public interface IHouseListingDal :IEntityRepository<HouseListing>
     {
         List<HouseListingDto> GetHouseListings();
+        HouseListingDetailDto GetHouseListingDetails(int listingId);
     }
 }
