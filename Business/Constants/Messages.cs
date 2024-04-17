@@ -11,6 +11,9 @@ namespace Business.Constants
         //Listing
         public static string ListingAdded = "İlan Başarıyla Eklendi";
         public static string ListingListed = "İlanlar Başarıyla Listelendi";
+        public static string ListingDeleted = "İlanlar başarıyla silindi";
+        public static string GetListingDetails = "İlanlar başarıyla getirildi";
+        public static string ListingUpdated = "İlanlar başarıyla güncellendi";
 
 
 
@@ -33,5 +36,30 @@ namespace Business.Constants
         public static string UserAlreadyExists = "Bu kullanıcı zaten mevcut";
         public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+
+        //City
+
+        public static string CityAdded = "Şehir başarıyla eklendi";
+        public static string CityDeleted = "Şehir başarıyla silindi";
+        public static string CityListed = "Şehirler başarıyla listelendi";
+        public static string CityUpdated = "Şehir başarıyla güncellendi";
+
+        //District
+
+        public static string DistrictAdded = "İlçe başarıyla eklendi";
+        public static string DistrictDeleted = "İlçe başarıyla silindi";
+        public static string DistrictListed = "İlçeler başarıyla listelendi";
+        public static string DistrictUpdated = "İlçe başarıyla güncellendi";
+
+        //HouseListing
+
+        public static string HouseListingAdded = "Ev ilanı başarıyla eklendi";
+        public static string HouseListingDeleted = "Ev ilanı başarıyla silindi";
+        public static string HouseListingListed = "Ev ilanları başarıyla listelendi";
+        public static string HouseListingUpdated = "Ev ilanları başarıyla güncellendi";
+        public static string GetHouseListing= "Ev ilanları başarıyla getirildi";
+        public static string GetHouseListingDetails = "Detaylar başarıyla getirildi";
+
+
     }
 }
