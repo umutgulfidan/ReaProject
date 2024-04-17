@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -21,29 +22,29 @@ namespace Business.Concrete
         public IResult Add(City city)
         {
             _cityDal.Add(city);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CityAdded);
         }
 
         public IResult Delete(City city)
         {
             _cityDal.Delete(city);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CityDeleted);
         }
 
         public IDataResult<List<City>> GetAll()
         {
-            return new SuccessDataResult<List<City>>(_cityDal.GetAll());
+            return new SuccessDataResult<List<City>>(_cityDal.GetAll(),Messages.CityListed);
         }
 
         public IDataResult<City> GetById(int id)
         {
-            return new SuccessDataResult<City>(_cityDal.Get(c=> c.Id ==id));
+            return new SuccessDataResult<City>(_cityDal.Get(c=> c.Id ==id),Messages.CityListed);
         }
 
         public IResult Update(City city)
         {
             _cityDal.Update(city);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CityUpdated);
         }
     }
 }

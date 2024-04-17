@@ -33,7 +33,7 @@ namespace Business.Concrete
         public IResult Delete(Listing entity)
         {
             _listingDal.Delete(entity);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingDeleted);
         }
 
         public IDataResult<List<Listing>> GetAll()
@@ -44,12 +44,12 @@ namespace Business.Concrete
 
         public IDataResult<Listing> GetById(int id)
         {
-            return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id));
+            return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id),Messages.ListingListed);
         }
 
         public IDataResult<List<ListingDto>> GetListingDetails()
         {
-            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingDetails());
+            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingDetails(),Messages.GetListingDetails);
 
         }
 
@@ -57,7 +57,7 @@ namespace Business.Concrete
         public IResult Update(Listing entity)
         {
             _listingDal.Update(entity);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingUpdated);
         }
 
         private int GenerateListingId(Listing item)

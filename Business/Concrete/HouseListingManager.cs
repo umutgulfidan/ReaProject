@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects;
+using Business.Constants;
 using Business.Dtos.Requests;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
@@ -78,7 +79,7 @@ namespace Business.Concrete
             };
 
             this.AddHouseListing(houseListingToAdd);
-            return new SuccessResult();
+            return new SuccessResult(Messages.HouseListingAdded);
         }
 
         [SecuredOperation("admin",true)]
@@ -93,20 +94,20 @@ namespace Business.Concrete
 
             _listingService.Delete(listingToDelete);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.HouseListingDeleted);
             
         }
 
         [CacheAspect(10)]
         public IDataResult<List<HouseListing>> GetAll()
         {
-            return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll());
+            return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll(),Messages.HouseListingListed);
         }
 
         [CacheAspect(10)]
         public IDataResult<HouseListing> GetById(int id)
         {
-             return new SuccessDataResult<HouseListing>(_houseListingDal.Get(hl=>hl.HouseListingId==id)) ;
+             return new SuccessDataResult<HouseListing>(_houseListingDal.Get(hl=>hl.HouseListingId==id),Messages.HouseListingListed) ;
         }
 
         [SecuredOperation("admin,moderator",true)]
@@ -155,7 +156,7 @@ namespace Business.Concrete
 
             _listingService.Update(listingToUpdate);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.HouseListingUpdated);
         }
 
         [ValidationAspect(typeof(HouseListing))]
@@ -166,12 +167,12 @@ namespace Business.Concrete
 
         public IDataResult<List<HouseListingDto>> GetHouseListingDtos()
         {
-            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings());
+            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings(),Messages.GetHouseListing);
         }
 
         public IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId)
         {
-            return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId));
+            return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId),Messages.GetHouseListingDetails);
         }
     }
 }
