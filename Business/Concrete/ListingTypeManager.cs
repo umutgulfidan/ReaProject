@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,29 +21,29 @@ namespace Business.Concrete
         public IResult Add(ListingType listingType)
         {
             _listingTypeDal.Add(listingType);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingTypeAdded);
         }
 
         public IResult Delete(ListingType listingType)
         {
             _listingTypeDal.Delete(listingType);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingTypeDeleted);
         }
 
         public IDataResult<List<ListingType>> GetAll()
         {
-            return new SuccessDataResult<List<ListingType>>(_listingTypeDal.GetAll());
+            return new SuccessDataResult<List<ListingType>>(_listingTypeDal.GetAll(),Messages.ListingTypeListed);
         }
 
         public IDataResult<ListingType> GetById(int id)
         {
-            return new SuccessDataResult<ListingType>(_listingTypeDal.Get(lt=> lt.Id==id));
+            return new SuccessDataResult<ListingType>(_listingTypeDal.Get(lt=> lt.Id==id),Messages.ListingTypeListed);
         }
 
         public IResult Update(ListingType listingType)
         {
             _listingTypeDal.Update(listingType);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingTypeUpdated);
         }
     }
 }
