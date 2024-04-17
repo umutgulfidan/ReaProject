@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -26,7 +27,7 @@ namespace Business.Concrete
         {
             entity.ListingId = GenerateListingId(entity);
             _listingDal.Add(entity);
-            return new SuccessResult();
+            return new SuccessResult(Messages.ListingAdded);
         }
 
         public IResult Delete(Listing entity)
@@ -37,7 +38,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Listing>> GetAll()
         {
-            return new SuccessDataResult<List<Listing>>(_listingDal.GetAll());
+            return new SuccessDataResult<List<Listing>>(_listingDal.GetAll(),Messages.ListingListed);
             
         }
 
