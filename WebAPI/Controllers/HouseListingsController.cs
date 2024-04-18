@@ -85,7 +85,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("getallbyfilter")]
+        [HttpPost("getallbyfilter")]
         public IActionResult GetAllByFilter(HouseFilterObject filter)
         {
             var result = _houseListingService.GetAllByFilter(filter);
