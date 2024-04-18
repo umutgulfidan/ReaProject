@@ -18,6 +18,7 @@ namespace Business.Abstract
         IDataResult<Listing> GetById(int id);
         IDataResult<List<Listing>> GetAll();
         IDataResult<List<ListingDto>> GetListingDetails();
+        IDataResult<List<ListingDto>> GetByFilter(ListingFilterObject filter);
 
     }
 }

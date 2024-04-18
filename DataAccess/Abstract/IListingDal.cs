@@ -12,5 +12,6 @@ namespace DataAccess.Abstract
     public interface IListingDal : IEntityRepository<Listing>
     {
         List<ListingDto> GetListingDetails();
+        List<ListingDto> GetListingsByFilter(ListingFilterObject filter);
     }
 }

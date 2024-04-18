@@ -49,6 +49,7 @@ namespace DataAccess.Concrete.EntityFramework
                         {
                             Id = houseListingWithImages.houseListingTypeInfo.houseListing.HouseListingId,
                             ListingId = houseListingWithImages.houseListingTypeInfo.listing.ListingId,
+                            SquareMeter = houseListingWithImages.houseListingTypeInfo.listing.SquareMeter,
                             CityName = houseListingWithImages.houseListingTypeInfo.city.CityName,
                             DistrictName = houseListingWithImages.houseListingTypeInfo.district.DistrictName,
                             Title = houseListingWithImages.houseListingTypeInfo.listing.Title,
@@ -60,10 +61,25 @@ namespace DataAccess.Concrete.EntityFramework
                             ListingTypeName = houseListingWithImages.houseListingTypeInfo.listingType.ListingTypeName,
                             RoomCount = houseListingWithImages.houseListingTypeInfo.houseListing.RoomCount,
                             ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                            BuildingAge = houseListingWithImages.houseListingTypeInfo.houseListing.BuildingAge,
+                            HasBalcony = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasBalcony,
+                            HasElevator = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasElevator,
+                            HasFurniture = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasFurniture,
+                            HasGarden = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasGarden,
+                            HasParking = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasParking,
+                            IsInGatedCommunity = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.IsInGatedCommunity,
                             Date = houseListingWithImages.houseListingTypeInfo.listing.Date
-                        });
+                        }) ;
 
                 // Filtre uygulamaları
+                if (filter.ListingId.HasValue)
+                {
+                    query = query.Where(dto => dto.ListingId == filter.ListingId);
+                }
+                if (!filter.Title.IsNullOrEmpty())
+                {
+                    query = query.Where(dto => dto.Title.Contains(filter.Title));
+                }
                 if (filter.RoomCount.HasValue)
                 {
                     query = query.Where(dto => dto.RoomCount == filter.RoomCount.Value);
@@ -138,43 +154,59 @@ namespace DataAccess.Concrete.EntityFramework
                 {
                     query = query.Where(dto => dto.IsInGatedCommunity == filter.IsInGatedCommunity.Value);
                 }
+                if(filter.MinSquareMeter.HasValue) {
+                    query = query.Where(dto=>dto.SquareMeter>=filter.MinSquareMeter.Value);
+                }
+                if (filter.MaxSquareMeter.HasValue)
+                {
+                    query = query.Where(dto => dto.SquareMeter <= filter.MaxSquareMeter.Value);
+                }
+                if (!filter.ListingTypeName.IsNullOrEmpty())
+                {
+                    query = query.Where(dto=>dto.ListingTypeName == filter.ListingTypeName);
+                }
+
 
 
 
                 // ListingId'ye göre gruplama ve ilk kaydı seçme işlemi
                 var result = query
-                    .GroupBy(dto => dto.ListingId)
-                    .Select(group => new HouseListingDto
-                    {
-                        Id = group.Key,
-                        ListingId = group.First().ListingId,
-                        Title = group.First().Title,
-                        Description = group.First().Description,
-                        CityName = group.First().CityName,
-                        DistrictName = group.First().DistrictName,
-                        ListingTypeName = group.First().ListingTypeName, 
-                        Price = group.First().Price,
-                        Date = group.First().Date,
-                        BathroomCount = group.First().BathroomCount,
-                        LivingRoomCount = group.First().LivingRoomCount,
-                        RoomCount = group.First().RoomCount,
-                        HouseTypeName = group.First().HouseTypeName,
-                        BuildingAge = group.First().BuildingAge,
-                        HasBalcony = group.First().HasBalcony,
-                        HasElevator = group.First().HasElevator,
-                        HasFurniture = group.First().HasFurniture,
-                        HasGarden = group.First().HasGarden,
-                        HasParking = group.First().HasParking,
-                        IsInGatedCommunity = group.First().IsInGatedCommunity,
+                .AsEnumerable()
+                 .GroupBy(dto => dto.ListingId)
+              .Select(group => new HouseListingDto
+              {
+                  Id = group.First().Id,
+                  BuildingAge = group.First().BuildingAge,
+                  HasBalcony = group.First().HasBalcony,
+                  HasElevator = group.First().HasElevator,
+                  HasFurniture = group.First().HasFurniture,
+                  HasGarden = group.First().HasGarden,
+                  HasParking = group.First().HasParking,
+                  IsInGatedCommunity = group.First().IsInGatedCommunity,
+                  ListingId = group.First().ListingId,
+                  Title = group.First().Title,
+                  Description = group.First().Description,
+                  CityName = group.First().CityName,
+                  DistrictName = group.First().DistrictName,
+                  ListingTypeName = group.First().ListingTypeName,
+                  Price = group.First().Price,
+                  Date = group.First().Date,
+                  BathroomCount = group.First().BathroomCount,
+                  LivingRoomCount = group.First().LivingRoomCount,
+                  RoomCount = group.First().RoomCount,
+                  HouseTypeName = group.First().HouseTypeName,
+                  SquareMeter = group.First().SquareMeter,
 
-                        ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
-                    })
-                    .OrderByDescending(dto => dto.Date)
-                    .ToList();
+
+                  // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
+                  ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
+              })
+     .OrderByDescending(dto => dto.Date)
+     .ToList();
 
 
                 return result;
-            }   
+            }
         }
         public List<HouseListingDto> GetHouseListings()
         {
@@ -226,7 +258,7 @@ namespace DataAccess.Concrete.EntityFramework
                             Date = houseListingWithImages.houseListingTypeInfo.listing.Date
                         });
 
-          
+
 
                 // ListingId'ye göre gruplama ve ilk kaydı seçme işlemi
                 var result = query
@@ -253,6 +285,8 @@ namespace DataAccess.Concrete.EntityFramework
                         HasGarden = group.First().HasGarden,
                         HasParking = group.First().HasParking,
                         IsInGatedCommunity = group.First().IsInGatedCommunity,
+                        SquareMeter = group.First().SquareMeter,
+
 
                         ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
                     })
@@ -267,7 +301,8 @@ namespace DataAccess.Concrete.EntityFramework
 
         public HouseListingDetailDto GetHouseListingDetails(int listingId)
         {
-            using(ReaContext context = new ReaContext()) {
+            using (ReaContext context = new ReaContext())
+            {
 
                 var query = from houseListing in context.HouseListings
                             join listing in context.Listings on houseListing.ListingId equals listing.ListingId
@@ -305,12 +340,13 @@ namespace DataAccess.Concrete.EntityFramework
                                 Description = listing.Description,
                                 Date = listing.Date,
                                 Price = listing.Price,
+                                SquareMeter = listing.SquareMeter,
                                 //User
-                                FirstName =user.FirstName,
-                                LastName =user.LastName,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
                                 UserEmail = user.Email,
                                 //ListingType
-                                ListingTypeName=listingType.ListingTypeName,
+                                ListingTypeName = listingType.ListingTypeName,
                                 //HouseType
                                 HouseTypeName = houseType.Name
                             };
