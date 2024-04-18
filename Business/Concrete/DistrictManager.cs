@@ -14,9 +14,11 @@ namespace Business.Concrete
     public class DistrictManager : IDistrictService
     {
         IDistrictDal _districtDal;
-        public DistrictManager(IDistrictDal districtDal)
+        ICityService _cityService;
+        public DistrictManager(IDistrictDal districtDal,ICityService cityService)
         {
             _districtDal = districtDal;
+            _cityService = cityService;
         }
         public IResult Add(District district)
         {
@@ -38,6 +40,12 @@ namespace Business.Concrete
         public IDataResult<List<District>> GetByCityId(int cityId)
         {
             return new SuccessDataResult<List<District>>(_districtDal.GetAll(d=> d.CityId==cityId),Messages.DistrictListed);
+        }
+
+        public IDataResult<List<District>> GetByCityName(string cityName)
+        {
+            var city = _cityService.GetByName(cityName);
+            return new SuccessDataResult<List<District>>(_districtDal.GetAll(d=>d.CityId == city.Data.Id ));
         }
 
         public IDataResult<District> GetById(int id)

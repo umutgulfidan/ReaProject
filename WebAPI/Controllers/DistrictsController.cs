@@ -34,6 +34,17 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getbycityname")]
+        public IActionResult GetByName(string cityName)
+        {
+            var result = _districtService.GetByCityName(cityName);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getbycityid")]
         public IActionResult GetByCityId(int cityId)
         {

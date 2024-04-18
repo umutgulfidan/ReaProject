@@ -41,6 +41,11 @@ namespace Business.Concrete
             return new SuccessDataResult<City>(_cityDal.Get(c=> c.Id ==id),Messages.CityListed);
         }
 
+        public IDataResult<City> GetByName(string cityName)
+        {
+            return new SuccessDataResult<City>(_cityDal.Get(c=>c.CityName==cityName),Messages.CityListed);
+        }
+
         public IResult Update(City city)
         {
             _cityDal.Update(city);
