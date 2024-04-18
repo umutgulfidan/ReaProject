@@ -25,6 +25,7 @@ namespace Entities.DTOs
         public string ImagePath { get; set; }
         public DateTime? Date { get; set; }
 
+        public int SquareMeter { get; set; }
         public int BuildingAge { get; set; }
         public bool HasGarden { get; set; }
         public bool HasElevator { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result = _listingService.GetAll();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbyfilter")]
+        public IActionResult GetAllByFilter(ListingFilterObject filter)
+        {
+            var result = _listingService.GetByFilter(filter);
             if (result.IsSuccess)
             {
                 return Ok(result);

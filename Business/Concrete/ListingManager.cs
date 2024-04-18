@@ -36,6 +36,10 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ListingDeleted);
         }
 
+        public IDataResult<List<ListingDto>> GetByFilter(ListingFilterObject filter)
+        {
+            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingsByFilter(filter));
+        }
         public IDataResult<List<Listing>> GetAll()
         {
             return new SuccessDataResult<List<Listing>>(_listingDal.GetAll(),Messages.ListingListed);
@@ -64,15 +68,15 @@ namespace Business.Concrete
         {
             // Belirtilen formata göre ListingId oluşturmak için bu metodu kullanabilirsiniz
             // Örneğin, bileşenleri birleştirme ve otomatik artan bir dizi numarası ekleyebilirsiniz
-            string listingIdString = $"{item.PropertyTypeId:D1}{item.ListingTypeId:D1}{item.CityId:D2}{GetNextSequenceNumber():D4}";
+            string listingIdString = $"{item.PropertyTypeId:D1}{item.ListingTypeId:D1}{item.CityId:D2}{GetNextSequenceNumber(item):D4}";
             return int.Parse(listingIdString);
         }
 
-        private int GetNextSequenceNumber()
+        private int GetNextSequenceNumber(Listing item)
         {
             // Veritabanından veya başka bir depolama mekanizmasından bir sonraki dizi numarasını almak için bu metodu uygulamanız gerekmektedir
             // Örneğin, mevcut maksimum dizi numarasını sorgulama ve artırma
-            int result = _listingDal.GetAll().Count + 1;
+            int result = _listingDal.GetAll(l=> l.PropertyTypeId == item.PropertyTypeId).Count + 1;
             return result; // Bu kısmı kendiniz uygulamanız gerekmektedir
         }
     }

@@ -9,6 +9,8 @@ namespace Entities.DTOs
     public class HouseListingDetailDto
     {
         public int Id { get; set; }
+
+        public int SquareMeter { get; set; }
         public int RoomCount { get; set; }
         public int BathroomCount { get; set; }
         public int LivingRoomCount { get; set; }
