@@ -72,14 +72,6 @@ namespace DataAccess.Concrete.EntityFramework
                         }) ;
 
                 // Filtre uygulamaları
-                if (filter.ListingId.HasValue)
-                {
-                    query = query.Where(dto => dto.ListingId == filter.ListingId);
-                }
-                if (!filter.Title.IsNullOrEmpty())
-                {
-                    query = query.Where(dto => dto.Title.Contains(filter.Title));
-                }
                 if (filter.RoomCount.HasValue)
                 {
                     query = query.Where(dto => dto.RoomCount == filter.RoomCount.Value);
@@ -164,6 +156,11 @@ namespace DataAccess.Concrete.EntityFramework
                 if (!filter.ListingTypeName.IsNullOrEmpty())
                 {
                     query = query.Where(dto=>dto.ListingTypeName == filter.ListingTypeName);
+                }
+                if (!filter.SearchText.IsNullOrEmpty())
+                {
+                    var searchText = filter.SearchText.ToLower();
+                    query = query.Where(dto => dto.ListingId.ToString() == searchText || dto.Title.Contains(searchText));
                 }
 
 
