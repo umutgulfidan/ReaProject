@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getallbyfilter")]
+        [HttpPost("getallbyfilter")]
         public IActionResult GetAllByFilter(ListingFilterObject filter)
         {
             var result = _listingService.GetByFilter(filter);
