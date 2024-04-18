@@ -8,8 +8,7 @@ namespace Entities.DTOs
 {
     public class HouseFilterObject
     {
-        public int? ListingId { get; set; }
-        public string? Title { get; set; }
+        public string? SearchText { get; set; }
         public int? RoomCount { get; set; }
         public int? BathroomCount { get; set; }
         public int? LivingRoomCount { get; set; }

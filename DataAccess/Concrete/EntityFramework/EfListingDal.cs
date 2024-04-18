@@ -94,9 +94,10 @@ namespace DataAccess.Concrete.EntityFramework
                 {
                     query = query.Where(dto => dto.SquareMeter >= filter.MinSquareMeter);
                 }
-                if (!filter.Title.IsNullOrEmpty())
+                if (!filter.SearchText.IsNullOrEmpty())
                 {
-                    query = query.Where(dto => dto.Title.Contains(filter.Title));
+                    var filterText = filter.SearchText.ToLower();
+                    query = query.Where(dto => dto.Title.Contains(filterText) || dto.Id.ToString()== filterText);
                 }
 
                 // Select
