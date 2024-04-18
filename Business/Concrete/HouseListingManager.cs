@@ -83,6 +83,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.HouseListingAdded);
         }
 
+        [TransactionScopeAspect]
         [SecuredOperation("admin",true)]
         [CacheRemoveAspect("IHouseListingService.Get")]
         public IResult Delete(DeleteHouseListingReq req)
@@ -152,7 +153,7 @@ namespace Business.Concrete
                 SquareMeter = req.SquareMeter,
                 Status = req.Status,
                 Title = req.Title,
-                UserId = req.UserId
+                UserId = req.UserId,
             };
 
             _listingService.Update(listingToUpdate);

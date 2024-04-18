@@ -1,4 +1,6 @@
-﻿using Core.Utilities.Results;
+﻿using Business.Dtos.Requests;
+using Business.Dtos.Requests.LandListingReq;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,9 @@ namespace Business.Abstract
 {
     public interface ILandListingService
     {
-        IResult Add(LandListing landListing);
-        IResult Delete(LandListing landListing);
-        IResult Update(LandListing landListing);
+        IResult Add(CreateLandListingReq req);
+        IResult Delete(DeleteLandListingReq req);
+        IResult Update(UpdateLandListingReq req);
         IDataResult<List<LandListing>> GetAll();
         IDataResult<LandListing> GetById(int id);
     }

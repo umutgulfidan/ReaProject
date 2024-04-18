@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Dtos.Requests.LandListingReq;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,9 +43,9 @@ namespace WebAPI.Controllers
 
         [HttpPost("update")]
 
-        public IActionResult Update(LandListing landListing)
+        public IActionResult Update(UpdateLandListingReq req)
         {
-            var result = _landListingService.Update(landListing);
+            var result = _landListingService.Update(req);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -54,9 +55,9 @@ namespace WebAPI.Controllers
 
         [HttpPost("add")]
 
-        public IActionResult Add(LandListing landListing)
+        public IActionResult Add(CreateLandListingReq req)
         {
-            var result = _landListingService.Add(landListing);
+            var result = _landListingService.Add(req);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -66,7 +67,7 @@ namespace WebAPI.Controllers
 
         [HttpPost("delete")]
 
-        public IActionResult Delete(LandListing landListing)
+        public IActionResult Delete(DeleteLandListingReq landListing)
         {
             var result = _landListingService.Delete(landListing);
             if (result.IsSuccess)

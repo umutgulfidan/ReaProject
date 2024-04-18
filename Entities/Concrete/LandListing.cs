@@ -11,6 +11,8 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
 
+        public int ListingId { get; set; }
+
         public int ParcelNo { get; set; }
 
         public int IslandNo { get; set; }
