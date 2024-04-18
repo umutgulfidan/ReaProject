@@ -25,6 +25,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<District> Districts { get; set; }
         public DbSet<HouseType> HouseTypes { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<LandListing> LandListings { get; set; }
 
         //User
 
