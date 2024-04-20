@@ -88,7 +88,7 @@ namespace DataAccess.Concrete.EntityFramework
                 }
                 if (filter.MaxSquareMeter.HasValue)
                 {
-                    query = query.Where(dto => dto.SquareMeter >= filter.MaxSquareMeter);
+                    query = query.Where(dto => dto.SquareMeter <= filter.MaxSquareMeter);
                 }
                 if (filter.MinSquareMeter.HasValue)
                 {

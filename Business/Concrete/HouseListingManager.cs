@@ -101,6 +101,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect(10)]
+
         public IDataResult<List<HouseListing>> GetAll()
         {
             return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll(),Messages.HouseListingListed);
@@ -166,7 +167,6 @@ namespace Business.Concrete
         {
             _houseListingDal.Update(houseListing);
         }
-
         public IDataResult<List<HouseListingDto>> GetHouseListingDtos()
         {
             return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings(),Messages.GetHouseListing);
