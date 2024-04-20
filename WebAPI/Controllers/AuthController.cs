@@ -26,26 +26,24 @@ namespace WebAPI.Controllers
             var result = _authService.CreateAccessToken(userToLogin.Data);
             if (result.IsSuccess)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }
         [HttpPost("register")]
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-            var userExists = _authService.UserExists(userForRegisterDto.Email);
-            if (!userExists.IsSuccess)
-            {
-                return BadRequest(userExists.Message);
-            }
-
             var registerResult = _authService.Register(userForRegisterDto);
-            var result = _authService.CreateAccessToken(registerResult.Data);
-            if (result.IsSuccess)
+            if(registerResult.IsSuccess)
             {
-                return Ok(result.Data);
+                var result = _authService.CreateAccessToken(registerResult.Data);
+                if (result.IsSuccess)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result.Message);
             }
-            return BadRequest(result.Message);
+            return BadRequest(registerResult);
         }
     }
 }
