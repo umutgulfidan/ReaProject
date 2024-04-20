@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests.UserImageReq;
+using Core.Extensions.Claims;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,23 @@ namespace WebAPI.Controllers
         {
             var result = _userImageService.GetAllByUserId(userId);
             if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getbytoken")]
+        public IActionResult GetByToke()
+        {
+            int userId = HttpContext.User.ClaimUserId();
+            if(userId == null)
+            {
+                return BadRequest();
+            }
+
+            var result = _userImageService.GetAllByUserId(userId);
+            if (result.IsSuccess)
             {
                 return Ok(result);
             }
