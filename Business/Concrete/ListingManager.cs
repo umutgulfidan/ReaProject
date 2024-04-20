@@ -30,6 +30,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ListingAdded);
         }
 
+
+
         public IResult Delete(Listing entity)
         {
             _listingDal.Delete(entity);
@@ -48,7 +50,7 @@ namespace Business.Concrete
 
         public IDataResult<Listing> GetById(int id)
         {
-            return new SuccessDataResult<Listing>(_listingDal.Get(l => l.ListingId==id),Messages.ListingListed);
+            return new SuccessDataResult<Listing>(_listingDal.Get(l=>l.ListingId==id),Messages.ListingListed);
         }
 
         public IDataResult<List<ListingDto>> GetListingDetails()
@@ -78,6 +80,11 @@ namespace Business.Concrete
             // Örneğin, mevcut maksimum dizi numarasını sorgulama ve artırma
             int result = _listingDal.GetAll(l=> l.PropertyTypeId == item.PropertyTypeId).Count + 1;
             return result; // Bu kısmı kendiniz uygulamanız gerekmektedir
+        }
+
+        public IDataResult<List<ListingDto>> GetByUserId(int userId)
+        {
+            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingDetailsByUserId(userId),Messages.ListingListed);
         }
     }
 }
