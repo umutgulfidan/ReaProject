@@ -262,7 +262,7 @@ namespace DataAccess.Concrete.EntityFramework
                     .GroupBy(dto => dto.ListingId)
                     .Select(group => new HouseListingDto
                     {
-                        Id = group.Key,
+                        Id = group.First().Id,
                         ListingId = group.First().ListingId,
                         Title = group.First().Title,
                         Description = group.First().Description,
@@ -314,6 +314,7 @@ namespace DataAccess.Concrete.EntityFramework
                             {
                                 //HouseListing
                                 Id = houseListing.HouseListingId,
+                                
                                 RoomCount = houseListing.RoomCount,
                                 BathroomCount = houseListing.BathroomCount,
                                 LivingRoomCount = houseListing.LivingRoomCount,
@@ -339,6 +340,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 Price = listing.Price,
                                 SquareMeter = listing.SquareMeter,
                                 //User
+                                UserId = user.Id,
                                 FirstName = user.FirstName,
                                 LastName = user.LastName,
                                 UserEmail = user.Email,
@@ -346,6 +348,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 ListingTypeName = listingType.ListingTypeName,
                                 //HouseType
                                 HouseTypeName = houseType.Name
+                                
                             };
 
                 return query.First();
