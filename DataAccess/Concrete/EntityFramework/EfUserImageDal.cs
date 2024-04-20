@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserImageDal : EfRepositoryBase<ReaContext,UserImage>,IUserImageDal
+    public class EfUserImageDal : EfRepositoryBase<ReaContext, UserImage>, IUserImageDal
     {
     }
 }

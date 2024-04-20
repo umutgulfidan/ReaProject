@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Extensions.Claims;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,23 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpGet("getbyuserid")]
+        public IActionResult GetByUserId()
+        {
+            var userId = HttpContext.User.ClaimUserId();
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+            var result = _listingService.GetByUserId(userId);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
         }
 
         [HttpPost("getallbyfilter")]

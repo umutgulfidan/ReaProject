@@ -5,6 +5,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,11 @@ namespace Business.Concrete
         public IDataResult<User> GetByMail(string mail)
         {
             return new SuccessDataResult<User>(_userDal.Get(u => u.Email == mail));
+        }
+
+        public IDataResult<UserDetailDto> GetUserDetailsById(int id)
+        {
+            return new SuccessDataResult<UserDetailDto>(_userDal.GetUserDetail(id));
         }
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)

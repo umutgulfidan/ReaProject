@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getallbyuseid")]
+        [HttpGet("getallbyuserid")]
         public IActionResult GetAllByUserId(int userId) 
         {
             var result = _userImageService.GetAllByUserId(userId);
@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(IFormFile file,CreateUserImageReq req)
+        public IActionResult Add([FromForm] IFormFile file, [FromForm] CreateUserImageReq req)
         {
             var result = _userImageService.Add(file, req);
             if(result.IsSuccess)
@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(IFormFile file, UserImage userImage)
+        public IActionResult Update([FromForm] IFormFile file, [FromForm] UserImage userImage)
         {
             var result = _userImageService.Update(file, userImage);
             if (result.IsSuccess)

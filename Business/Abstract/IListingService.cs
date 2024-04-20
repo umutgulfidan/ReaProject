@@ -16,6 +16,7 @@ namespace Business.Abstract
         IResult Delete(Listing entity);
         IResult Update(Listing entity);
         IDataResult<Listing> GetById(int id);
+        IDataResult<List<ListingDto>> GetByUserId(int userId);
         IDataResult<List<Listing>> GetAll();
         IDataResult<List<ListingDto>> GetListingDetails();
         IDataResult<List<ListingDto>> GetByFilter(ListingFilterObject filter);

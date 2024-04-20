@@ -1,6 +1,7 @@
 ﻿using Core.DataAccess.EntityFramework;
 using Core.Entities.Concrete;
 using DataAccess.Abstract;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,25 @@ namespace DataAccess.Concrete.EntityFramework
 
             }
         }
+
+        public UserDetailDto GetUserDetail(int id)
+        {
+            using (var context = new ReaContext())
+            {
+                var result = from user in context.Users
+                             where user.Id == id
+                             select new UserDetailDto
+                             {
+                                 Id = user.Id,
+                                 Email = user.Email,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                             };
+
+
+                return result.First(); // veya result.SingleOrDefault() kullanarak tek bir sonuç alabilirsiniz
+            }
+        }
+
     }
 }
