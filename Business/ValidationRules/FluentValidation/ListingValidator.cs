@@ -20,7 +20,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(l=> l.SquareMeter).GreaterThan(0);
             RuleFor(l=>l.Title).MaximumLength(50);
             RuleFor(l => l.Description).MinimumLength(0);
-            RuleFor(l=>l.Description).MaximumLength(255);
+            RuleFor(l=>l.Description).MaximumLength(2048);
 
         }
     }

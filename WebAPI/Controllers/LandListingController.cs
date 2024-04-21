@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Dtos.Requests.LandListingReq;
+using Core.Extensions.Claims;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,31 @@ namespace WebAPI.Controllers
         {
             _landListingService = landListingService;
         }
+
+
+        [HttpGet("getlandlistingdetail")]
+        public IActionResult GetLandListingDetail(int listingId)
+        {
+            var result = _landListingService.GetLandListingDetail(listingId);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getlandlistings")]
+        public IActionResult GetLandListings()
+        {
+            var result = _landListingService.GetLandListings();
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
 
         [HttpGet("getall")]
 
@@ -45,6 +71,13 @@ namespace WebAPI.Controllers
 
         public IActionResult Update(UpdateLandListingReq req)
         {
+            var userId = HttpContext.User.ClaimUserId();
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+            req.UserId = userId;
+
             var result = _landListingService.Update(req);
             if (result.IsSuccess)
             {
@@ -57,6 +90,13 @@ namespace WebAPI.Controllers
 
         public IActionResult Add(CreateLandListingReq req)
         {
+            var userId = HttpContext.User.ClaimUserId();
+            if(userId == null)
+            {
+                return BadRequest();
+            }
+            req.UserId = userId;
+
             var result = _landListingService.Add(req);
             if (result.IsSuccess)
             {
