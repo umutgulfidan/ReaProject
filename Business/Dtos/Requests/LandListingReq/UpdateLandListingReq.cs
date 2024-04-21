@@ -23,6 +23,7 @@ namespace Business.Dtos.Requests.LandListingReq
 
         // -----------------------
         public int Id { get; set; }
+        public string Address { get; set; }
         public int ParcelNo { get; set; }
 
         public int IslandNo { get; set; }

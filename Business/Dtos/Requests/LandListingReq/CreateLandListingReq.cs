@@ -12,7 +12,7 @@ namespace Business.Dtos.Requests.LandListingReq
         public int UserId { get; set; }
         public int CityId { get; set; }
         public int ListingTypeId { get; set; }
-        public int PropertyTypeId { get; set; } = 1;
+        public int PropertyTypeId { get; set; } = 2;
         public int DistrictId { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
@@ -23,6 +23,7 @@ namespace Business.Dtos.Requests.LandListingReq
 
         // -----------
 
+        public string Address { get; set; }
         public int ParcelNo { get; set; }
 
         public int IslandNo { get; set; }

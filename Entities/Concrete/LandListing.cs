@@ -10,6 +10,7 @@ namespace Entities.Concrete
     public class LandListing : IEntity
     {
         public int Id { get; set; }
+        public string Address { get; set; }
 
         public int ListingId { get; set; }
 

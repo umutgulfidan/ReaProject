@@ -53,6 +53,7 @@ namespace Business.Concrete
                 SquareMeter = req.SquareMeter,
                 Title = req.Title,
                 UserId = req.UserId,
+                Status = req.Status,
             };
             
             _listingService.Add(listingToAdd);
@@ -155,6 +156,7 @@ namespace Business.Concrete
                 Status = req.Status,
                 Title = req.Title,
                 UserId = req.UserId,
+                PropertyTypeId = req.PropertyTypeId
             };
 
             _listingService.Update(listingToUpdate);

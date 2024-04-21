@@ -8,6 +8,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,7 +30,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(LandListingValidator))]
-        public IResult Add(LandListing landListing)
+        public IResult LandListingAdd(LandListing landListing)
         {
             _landListingDal.Add(landListing);
             return new SuccessResult();
@@ -61,15 +62,16 @@ namespace Business.Concrete
                 ParcelNo = req.ParcelNo,
                 SheetNo = req.SheetNo,
                 FloorEquivalent = req.FloorEquivalent,
+                Address = req.Address
             };
 
-            this.Add(landListingToAdd);
+            this.LandListingAdd(landListingToAdd);
 
             return new SuccessResult();
             
         }
 
-        public IResult Delete(LandListing landListing)
+        public IResult LandListingDelete(LandListing landListing)
         {
             _landListingDal.Delete(landListing);
             return new SuccessResult();
@@ -79,7 +81,7 @@ namespace Business.Concrete
         public IResult Delete(DeleteLandListingReq req)
         {
             var landListingToDelete = _landListingDal.Get(ll=>ll.Id == req.Id);
-            this.Delete(landListingToDelete);
+            this.LandListingDelete(landListingToDelete);
 
             var listingToDelete = _listingService.GetById(landListingToDelete.ListingId).Data;
             _listingService.Delete(listingToDelete);
@@ -97,8 +99,17 @@ namespace Business.Concrete
             return new SuccessDataResult<LandListing>(_landListingDal.Get(ll=>ll.Id==id));
         }
 
+        public IDataResult<List<LandListingDto>> GetLandListings()
+        {
+            return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetLandListings());
+        }
+        public IDataResult<LandListingDetailDto> GetLandListingDetail(int listingId)
+        {
+            return new SuccessDataResult<LandListingDetailDto>(_landListingDal.GetLandListingDetail(listingId));
+        }
+
         [ValidationAspect(typeof (LandListingValidator))]
-        public IResult Update(LandListing landListing)
+        public IResult LandListingUpdate(LandListing landListing)
         {
 
             _landListingDal.Update(landListing);
@@ -118,10 +129,11 @@ namespace Business.Concrete
                 IslandNo = req.IslandNo,
                 ListingId = listingId,
                 ParcelNo = req.ParcelNo,
-                SheetNo = req.SheetNo
+                SheetNo = req.SheetNo,
+                Address = req.Address,
             };
 
-            this.Update(landListingToUpdate);
+            this.LandListingUpdate(landListingToUpdate);
 
             var listingToUpdate = new Listing()
             {
@@ -135,7 +147,8 @@ namespace Business.Concrete
                 SquareMeter = req.SquareMeter,
                 Status = req.Status,
                 Title = req.Title,
-                UserId = req.UserId
+                UserId = req.UserId,
+                PropertyTypeId = req.PropertyTypeId
             };
 
             _listingService.Update(listingToUpdate);
