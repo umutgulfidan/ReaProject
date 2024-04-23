@@ -68,8 +68,11 @@ namespace DataAccess.Concrete.EntityFramework
                             HasGarden = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasGarden,
                             HasParking = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.HasParking,
                             IsInGatedCommunity = (bool)houseListingWithImages.houseListingTypeInfo.houseListing.IsInGatedCommunity,
-                            Date = houseListingWithImages.houseListingTypeInfo.listing.Date
+                            Date = houseListingWithImages.houseListingTypeInfo.listing.Date,
+                            Status = houseListingWithImages.houseListingTypeInfo.listing.Status
                         }) ;
+
+                query = query.Where(dto=>dto.Status == true );
 
                 // Filtre uygulamaları
                 if (filter.RoomCount.HasValue)
@@ -252,9 +255,12 @@ namespace DataAccess.Concrete.EntityFramework
                             ListingTypeName = houseListingWithImages.houseListingTypeInfo.listingType.ListingTypeName,
                             RoomCount = houseListingWithImages.houseListingTypeInfo.houseListing.RoomCount,
                             ImagePath = image != null ? image.ImagePath : defaultImagePath,
-                            Date = houseListingWithImages.houseListingTypeInfo.listing.Date
+                            Date = houseListingWithImages.houseListingTypeInfo.listing.Date,
+                            Status = houseListingWithImages.houseListingTypeInfo.listing.Status
+
                         });
 
+                query = query.Where(dto=> dto.Status == true);
 
 
                 // ListingId'ye göre gruplama ve ilk kaydı seçme işlemi
@@ -309,7 +315,7 @@ namespace DataAccess.Concrete.EntityFramework
                             join listingType in context.ListingTypes on listing.ListingTypeId equals listingType.Id
                             join user in context.Users on listing.UserId equals user.Id
 
-                            where listing.ListingId == listingId
+                            where listing.ListingId == listingId && listing.Status == true
                             select new HouseListingDetailDto
                             {
                                 //HouseListing

@@ -33,6 +33,7 @@ namespace Entities.DTOs
         public bool HasParking { get; set; }
         public bool HasBalcony { get; set; }
         public bool IsInGatedCommunity { get; set; }
+        public bool? Status { get; set; }
 
 
     }

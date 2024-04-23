@@ -34,7 +34,21 @@ namespace Business.Concrete
 
         public IResult Delete(Listing entity)
         {
-            _listingDal.Delete(entity);
+            entity.Status = false;
+            _listingDal.Update(entity);
+            return new SuccessResult(Messages.ListingDeleted);
+        }
+
+        public IResult DeleteById(int id)
+        {
+            var result = this.GetById(id).Data;
+            if(result == null)
+            {
+                return new ErrorResult("İlan bulunamadı");
+            }
+
+            result.Status = false;
+            _listingDal.Update(result);
             return new SuccessResult(Messages.ListingDeleted);
         }
 

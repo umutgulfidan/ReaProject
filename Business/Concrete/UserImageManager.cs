@@ -49,12 +49,12 @@ namespace Business.Concrete
 
         public IDataResult<List<UserImage>> GetAll()
         {
-            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(),Messages.UserImageListed);
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.Status==true),Messages.UserImageListed);
         }
 
         public IDataResult<List<UserImage>> GetAllByUserId(int userId)
         {
-            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.UserId==userId),Messages.UserImageListed);
+            return new SuccessDataResult<List<UserImage>>(_userImageDal.GetAll(ui=>ui.UserId==userId&&ui.Status==true),Messages.UserImageListed);
         }
 
         public IResult Update(IFormFile formFile, UserImage userImage)
