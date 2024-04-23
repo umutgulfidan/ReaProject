@@ -38,7 +38,7 @@ namespace Business.Concrete
 
 
         [TransactionScopeAspect]
-        public IResult Add(CreateLandListingReq req)
+        public IDataResult<LandListing>Add(CreateLandListingReq req)
         {
             var listingToAdd = new Listing
             {
@@ -67,7 +67,7 @@ namespace Business.Concrete
 
             this.LandListingAdd(landListingToAdd);
 
-            return new SuccessResult();
+            return new SuccessDataResult<LandListing>(landListingToAdd);
             
         }
 
