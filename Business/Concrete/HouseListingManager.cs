@@ -38,7 +38,7 @@ namespace Business.Concrete
         [SecuredOperation("admin",true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IHouseListingService.Get")]
-        public IResult Add(CreateHouseListingReq req)
+        public IDataResult<HouseListing> Add(CreateHouseListingReq req)
         {
 
             var listingToAdd = new Listing
@@ -81,7 +81,7 @@ namespace Business.Concrete
             };
 
             this.AddHouseListing(houseListingToAdd);
-            return new SuccessResult(Messages.HouseListingAdded);
+            return new SuccessDataResult<HouseListing>(houseListingToAdd,Messages.HouseListingAdded);
         }
 
         [TransactionScopeAspect]
