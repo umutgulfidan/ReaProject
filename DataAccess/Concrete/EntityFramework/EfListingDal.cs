@@ -57,10 +57,13 @@ namespace DataAccess.Concrete.EntityFramework
                         Title = listingWithImages.listingInfo.listing.Title,
                         ListingTypeName = listingWithImages.listingInfo.listingType.ListingTypeName,
                         PropertyTypeName = listingWithImages.listingInfo.propertyType.Name,
-                        ImagePath = image != null ? image.ImagePath : defaultImagePath
+                        ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                        Status = listingWithImages.listingInfo.listing.Status
+                        
                     });
 
                 // Filter
+                query = query.Where(dto=> dto.Status ==true);
 
                 if (filter.ListingId.HasValue)
                 {
@@ -166,8 +169,11 @@ namespace DataAccess.Concrete.EntityFramework
                          Title = listingWithImages.listingInfo.listing.Title,
                          ListingTypeName = listingWithImages.listingInfo.listingType.ListingTypeName,
                          PropertyTypeName = listingWithImages.listingInfo.propertyType.Name,
-                         ImagePath = image != null ? image.ImagePath : defaultImagePath
+                         ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                         Status = listingWithImages.listingInfo.listing.Status
                      });
+
+                query = query.Where(dto=>dto.Status==true);
 
 
                 var result = query
@@ -232,8 +238,12 @@ namespace DataAccess.Concrete.EntityFramework
                          Title = listingWithImages.listingInfo.listing.Title,
                          ListingTypeName = listingWithImages.listingInfo.listingType.ListingTypeName,
                          PropertyTypeName = listingWithImages.listingInfo.propertyType.Name,
-                         ImagePath = image != null ? image.ImagePath : defaultImagePath
+                         ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                         Status = listingWithImages.listingInfo.listing.Status
                      });
+
+                query = query.Where(dto=>dto.Status==true);
+
 
 
                 var result = query
