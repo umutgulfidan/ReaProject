@@ -26,5 +26,6 @@ namespace Entities.DTOs
         public DateTime? Date { get; set; }
         public int SquareMeter { get; set; }
         public string ImagePath { get; set; }
+        public bool? Status { get; set; }
     }
 }

@@ -75,12 +75,12 @@ namespace Business.Concrete
 
         public IDataResult<List<ListingImage>> GetByListingId(int listingId)
         {
-            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.ListingId==listingId),Messages.ListingImageListed);
+            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.ListingId==listingId&&li.Status==true),Messages.ListingImageListed);
         }
 
         public IDataResult<List<ListingImage>> GetAll()
         {
-            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(),Messages.ListingImageListed);
+            return new SuccessDataResult<List<ListingImage>>(_listingImageDal.GetAll(li=>li.Status==true),Messages.ListingImageListed);
         }
 
         public IResult Update(IFormFile file, ListingImage listingImage)

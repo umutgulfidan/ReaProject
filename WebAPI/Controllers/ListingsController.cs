@@ -16,6 +16,17 @@ namespace WebAPI.Controllers
             _listingService = listingService;
         }
 
+        [HttpPost("deletebyid")]
+        public IActionResult DeleteById(int listingId)
+        {
+            var result = _listingService.DeleteById(listingId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {

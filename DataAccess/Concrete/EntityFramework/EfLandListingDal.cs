@@ -26,6 +26,7 @@ namespace DataAccess.Concrete.EntityFramework
                             join user in context.Users on listing.UserId equals user.Id
 
                             where listing.ListingId == listingId
+                            && listing.Status == true
                             select new LandListingDetailDto
                             {
                                 //LandListing
@@ -108,8 +109,10 @@ namespace DataAccess.Concrete.EntityFramework
                             SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
                             FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
                             Address = landListingWithImages.landListingTypeInfo.landListing.Address,
+                            Status = landListingWithImages.landListingTypeInfo.listing.Status
                         });
 
+                query = query.Where(dto=>dto.Status==true);
 
                 var result = query
                .AsEnumerable()
