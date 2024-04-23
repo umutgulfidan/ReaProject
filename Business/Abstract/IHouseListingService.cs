@@ -13,7 +13,7 @@ namespace Business.Abstract
     public interface IHouseListingService
     {
         void AddHouseListing(HouseListing houseListing);
-        IResult Add(CreateHouseListingReq req);
+        IDataResult<HouseListing> Add(CreateHouseListingReq req);
         IResult Delete(DeleteHouseListingReq req);
         IResult Update(UpdateHouseListingReq req);
 
