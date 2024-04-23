@@ -9,11 +9,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LandListingController : ControllerBase
+    public class LandListingsController : ControllerBase
     {
         ILandListingService _landListingService;
 
-        public LandListingController(ILandListingService landListingService)
+        public LandListingsController(ILandListingService landListingService)
         {
             _landListingService = landListingService;
         }
