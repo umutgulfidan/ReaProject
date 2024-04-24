@@ -27,16 +27,29 @@ namespace Business.Concrete
 
         public IResult Add(IFormFile file, CreateUserImageReq req)
         {
+            UpdateStatus(req.UserId);
+
             UserImage userImage = new UserImage();
             userImage.UserId = req.UserId;
             userImage.Status = req.Status;
             userImage.Date = req.Date;
 
-            userImage.ImagePath = _fileHelper.Upload(file,PathConstants.UserImagePath);
+            userImage.ImagePath = _fileHelper.Upload(file, PathConstants.UserImagePath);
 
             _userImageDal.Add(userImage);
             return new SuccessResult(Messages.UserImageAdded);
         }
+
+        private void UpdateStatus(int userId)
+        {
+            var imageList = _userImageDal.GetAll(ui => ui.UserId == userId && ui.Status == true);
+            foreach (var image in imageList)
+            {
+                image.Status = false;
+                _userImageDal.Update(image);
+            }
+        }
+
         public IResult Delete(DeleteUserImageReq req) 
         {
             UserImage userImage = _userImageDal.Get(ui=> ui.Id==req.Id);
@@ -63,6 +76,12 @@ namespace Business.Concrete
             _userImageDal.Update(userImage);
             return new SuccessResult(Messages.UserImageUpdated);
 
+        }
+
+        public IResult DeleteAll(int userId)
+        {
+            UpdateStatus(userId);
+            return new SuccessResult();
         }
     }
 }

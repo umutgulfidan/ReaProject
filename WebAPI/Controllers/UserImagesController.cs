@@ -58,6 +58,7 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromForm] IFormFile file, [FromForm] CreateUserImageReq req)
         {
+            req.UserId = HttpContext.User.ClaimUserId();
             var result = _userImageService.Add(file, req);
             if(result.IsSuccess)
             {
@@ -81,6 +82,18 @@ namespace WebAPI.Controllers
         public IActionResult Delete(DeleteUserImageReq req)
         {
             var result = _userImageService.Delete(req);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("deleteallimages")]
+        public IActionResult DeleteAllImages()
+        {
+            int userId = HttpContext.User.ClaimUserId();
+            var result = _userImageService.DeleteAll(userId);
             if (result.IsSuccess)
             {
                 return Ok(result);

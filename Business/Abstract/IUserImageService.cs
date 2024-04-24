@@ -16,6 +16,7 @@ namespace Business.Abstract
         IDataResult<List<UserImage>> GetAllByUserId(int userId);
         IResult Add(IFormFile formFile,CreateUserImageReq req);
         IResult Delete(DeleteUserImageReq req);
+        IResult DeleteAll(int userId);
         IResult Update(IFormFile formFile, UserImage userImage);
 
     }
