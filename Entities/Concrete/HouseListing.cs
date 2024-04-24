@@ -24,6 +24,5 @@ namespace Entities.Concrete
         public bool? HasFurniture { get; set; }
         public bool? IsInGatedCommunity { get; set; }
         public int BuildingAge { get; set; }
-        public string Address { get; set; }
     }
 }

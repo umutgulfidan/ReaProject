@@ -15,12 +15,16 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(l => l.Title).NotEmpty();
             RuleFor(l => l.Price).NotEmpty();
             RuleFor(l => l.SquareMeter).NotEmpty();
+            RuleFor(l=>l.Address).NotEmpty();
 
             RuleFor(l => l.Price).GreaterThan(0);
             RuleFor(l=> l.SquareMeter).GreaterThan(0);
             RuleFor(l=>l.Title).MaximumLength(50);
             RuleFor(l => l.Description).MinimumLength(0);
             RuleFor(l=>l.Description).MaximumLength(2048);
+
+            RuleFor(l=>l.Address).MinimumLength(0);
+            RuleFor(l=>l.Address).MaximumLength(255);
 
         }
     }

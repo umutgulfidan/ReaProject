@@ -52,6 +52,7 @@ namespace Business.Concrete
                 SquareMeter = req.SquareMeter,
                 Title = req.Title,
                 UserId = req.UserId,
+                Address = req.Address,
             };
             _listingService.Add(listingToAdd);
 
@@ -62,7 +63,6 @@ namespace Business.Concrete
                 ParcelNo = req.ParcelNo,
                 SheetNo = req.SheetNo,
                 FloorEquivalent = req.FloorEquivalent,
-                Address = req.Address
             };
 
             this.LandListingAdd(landListingToAdd);
@@ -130,13 +130,13 @@ namespace Business.Concrete
                 ListingId = listingId,
                 ParcelNo = req.ParcelNo,
                 SheetNo = req.SheetNo,
-                Address = req.Address,
             };
 
             this.LandListingUpdate(landListingToUpdate);
 
             var listingToUpdate = new Listing()
             {
+                Address = req.Address,
                 CityId = req.CityId,
                 Date = req.Date,
                 Description = req.Description,

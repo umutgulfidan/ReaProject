@@ -257,6 +257,7 @@ namespace DataAccess.Concrete.EntityFramework
                             ImagePath = image != null ? image.ImagePath : defaultImagePath,
                             Date = houseListingWithImages.houseListingTypeInfo.listing.Date,
                             Status = houseListingWithImages.houseListingTypeInfo.listing.Status
+                            
 
                         });
 
@@ -333,7 +334,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 HasParking = houseListing.HasParking,
                                 IsInGatedCommunity = houseListing.IsInGatedCommunity,
                                 BuildingAge = houseListing.BuildingAge,
-                                Address = houseListing.Address,
+                                Address = listing.Address,
                                 //City
                                 CityName = city.CityName,
                                 //District
