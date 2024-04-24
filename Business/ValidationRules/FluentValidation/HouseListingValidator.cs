@@ -12,7 +12,6 @@ namespace Business.ValidationRules.FluentValidation
     {
         public HouseListingValidator()
         {
-            RuleFor(hl=> hl.Address).NotEmpty();
             RuleFor(hl=> hl.BuildingAge).NotEmpty();
             RuleFor(hl=>hl.CurrentFloor).NotEmpty();
             RuleFor(hl=>hl.FloorCount).NotEmpty();
@@ -26,8 +25,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(hl => hl.BathroomCount).GreaterThan(0);
             RuleFor(hl => hl.LivingRoomCount).GreaterThan(0);
             RuleFor(hl => hl.RoomCount).GreaterThan(0);
-            
-            RuleFor(hl=>hl.Address).MinimumLength(5);
+           
 
         }
     }

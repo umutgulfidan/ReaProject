@@ -36,7 +36,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 SheetNo = landListing.SheetNo,
                                 FloorEquivalent = landListing.FloorEquivalent,
 
-                                Address = landListing.Address,
+                                Address = listing.Address,
                                 //City
                                 CityName = city.CityName,
                                 //District
@@ -108,7 +108,7 @@ namespace DataAccess.Concrete.EntityFramework
                             IslandNo = landListingWithImages.landListingTypeInfo.landListing.IslandNo,
                             SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
                             FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
-                            Address = landListingWithImages.landListingTypeInfo.landListing.Address,
+                            Address = landListingWithImages.landListingTypeInfo.listing.Address,
                             Status = landListingWithImages.landListingTypeInfo.listing.Status
                         });
 

@@ -43,6 +43,7 @@ namespace Business.Concrete
 
             var listingToAdd = new Listing
             {
+                Address = req.Address,
                 ListingTypeId = req.ListingTypeId,
                 PropertyTypeId = req.PropertyTypeId,
                 CityId = req.CityId,
@@ -67,7 +68,6 @@ namespace Business.Concrete
                 HasElevator = req.HasElevator,
                 HasBalcony = req.HasBalcony,
                 FloorCount = req.FloorCount,
-                Address = req.Address,
                 BathroomCount = req.BathroomCount,
                 BuildingAge = req.BuildingAge,
                 CurrentFloor = req.CurrentFloor,
@@ -129,7 +129,6 @@ namespace Business.Concrete
                 HasElevator = req.HasElevator,
                 HasBalcony = req.HasBalcony,
                 FloorCount = req.FloorCount,
-                Address = req.Address,
                 BathroomCount = req.BathroomCount,
                 BuildingAge = req.BuildingAge,
                 CurrentFloor = req.CurrentFloor,
@@ -145,6 +144,7 @@ namespace Business.Concrete
 
             var listingToUpdate = new Listing()
             {
+                Address = req.Address,
                 CityId = req.CityId,
                 Date = req.Date,
                 Description = req.Description,
