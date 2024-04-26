@@ -2,6 +2,7 @@
 using Business.Dtos.Requests.LandListingReq;
 using Core.Extensions.Claims;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,17 @@ namespace WebAPI.Controllers
         public IActionResult GetLandListings()
         {
             var result = _landListingService.GetLandListings();
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbyfilter")]
+        public IActionResult GetByFilter(LandListingFilterObject filter)
+        {
+            var result = _landListingService.GetAllByFilter(filter);
             if(result.IsSuccess)
             {
                 return Ok(result);

@@ -33,7 +33,7 @@ namespace Business.Concrete
         public IResult LandListingAdd(LandListing landListing)
         {
             _landListingDal.Add(landListing);
-            return new SuccessResult();
+            return new SuccessResult(Messages.LandListingAdded);
         }
 
 
@@ -67,14 +67,14 @@ namespace Business.Concrete
 
             this.LandListingAdd(landListingToAdd);
 
-            return new SuccessDataResult<LandListing>(landListingToAdd);
+            return new SuccessDataResult<LandListing>(landListingToAdd,Messages.LandListingAdded);
             
         }
 
         public IResult LandListingDelete(LandListing landListing)
         {
             _landListingDal.Delete(landListing);
-            return new SuccessResult();
+            return new SuccessResult(Messages.LandListingDeleted);
         }
 
         [TransactionScopeAspect]
@@ -86,26 +86,26 @@ namespace Business.Concrete
             var listingToDelete = _listingService.GetById(landListingToDelete.ListingId).Data;
             _listingService.Delete(listingToDelete);
 
-            return new SuccessResult();
+            return new SuccessResult(Messages.LandListingDeleted);
         }
 
         public IDataResult<List<LandListing>> GetAll()
         {
-            return new SuccessDataResult<List<LandListing>>(_landListingDal.GetAll());
+            return new SuccessDataResult<List<LandListing>>(_landListingDal.GetAll(), Messages.LandListingListed);
         }
 
         public IDataResult<LandListing> GetById(int id)
         {
-            return new SuccessDataResult<LandListing>(_landListingDal.Get(ll=>ll.Id==id));
+            return new SuccessDataResult<LandListing>(_landListingDal.Get(ll=>ll.Id==id),Messages.LandListingListed);
         }
 
         public IDataResult<List<LandListingDto>> GetLandListings()
         {
-            return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetLandListings());
+            return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetLandListings(),Messages.LandListingListed);
         }
         public IDataResult<LandListingDetailDto> GetLandListingDetail(int listingId)
         {
-            return new SuccessDataResult<LandListingDetailDto>(_landListingDal.GetLandListingDetail(listingId));
+            return new SuccessDataResult<LandListingDetailDto>(_landListingDal.GetLandListingDetail(listingId),Messages.GetLandListingDetail);
         }
 
         [ValidationAspect(typeof (LandListingValidator))]
@@ -113,7 +113,7 @@ namespace Business.Concrete
         {
 
             _landListingDal.Update(landListing);
-            return new SuccessResult();
+            return new SuccessResult(Messages.LandListingUpdated);
         }
 
         [TransactionScopeAspect]
@@ -153,7 +153,12 @@ namespace Business.Concrete
 
             _listingService.Update(listingToUpdate);
 
-            return new SuccessResult(Messages.HouseListingUpdated);
+            return new SuccessResult(Messages.LandListingUpdated);
+        }
+
+        public IDataResult<List<LandListingDto>> GetAllByFilter(LandListingFilterObject filter)
+        {
+            return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetAllByFilter(filter),Messages.LandListingFiltered);
         }
     }
 }

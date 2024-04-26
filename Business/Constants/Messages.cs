@@ -60,6 +60,15 @@ namespace Business.Constants
         public static string GetHouseListing= "Ev ilanları başarıyla getirildi";
         public static string GetHouseListingDetails = "Detaylar başarıyla getirildi";
 
+        //LandListing
+
+        public static string LandListingAdded = "Arsa ilanı başarıyla eklendi";
+        public static string LandListingDeleted = "Arsa ilanı başarıyla silindi";
+        public static string LandListingListed = "Arsa ilanları başarıyla listelendi";
+        public static string LandListingUpdated = "Arsa ilanları başarıyla güncellendi";
+        public static string LandListingFiltered = "Arsa ilanları başarıyla filtrelendi";
+        public static string GetLandListingDetail = "Detaylar başarıyla getirildi";
+
         //HouseType
 
         public static string HouseTypeAdded = "Ev tipi başarıyla eklendi";

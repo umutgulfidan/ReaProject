@@ -15,6 +15,7 @@ namespace Business.Abstract
     {
         IDataResult<List<LandListingDto>> GetLandListings();
         IDataResult<LandListingDetailDto> GetLandListingDetail(int listingId);
+        IDataResult<List<LandListingDto>> GetAllByFilter(LandListingFilterObject filter);
         IDataResult<LandListing> Add(CreateLandListingReq req);
         IResult Delete(DeleteLandListingReq req);
         IResult Update(UpdateLandListingReq req);
