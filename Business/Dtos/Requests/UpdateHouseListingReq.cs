@@ -18,7 +18,7 @@ namespace Business.Dtos.Requests
         public decimal Price { get; set; }
         public DateTime? Date { get; set; } = DateTime.Now;
         public int SquareMeter { get; set; }
-        public bool Status { get; set; }
+        public bool Status { get; set; } = true;
 
         // -------------------
         public int HouseListingId { get; set; }

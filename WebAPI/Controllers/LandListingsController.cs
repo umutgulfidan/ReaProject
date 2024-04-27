@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getallbyfilter")]
+        [HttpPost("getallbyfilter")]
         public IActionResult GetByFilter(LandListingFilterObject filter)
         {
             var result = _landListingService.GetAllByFilter(filter);
