@@ -1,41 +1,38 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Business.Concrete;
+using ConsoleUI;
+using Core.Entities.Concrete;
+using Core.Utilities.Security.Jwt;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 
-//ListingManager listingManager = new ListingManager(new EfListingDal());
-//listingManager.Add(new Listing
-//{
-//    Date = DateTime.Now,
-//    Description = "Console Test",
-//    CityId = 34,
-//    DistrictId = 1,
-//   Price = 10000,
-//    SquareMeter = 122,
-//    Title = "Doktordan Tertemiz Müstakil",
-//    UserId = 1,
-//});
-
-//List<Listing> liste = listingManager.GetAll();
-//foreach (var item in liste)
-//{
-//    Console.WriteLine(item.lis);
-//   Console.WriteLine(item.Title);
-//   Console.WriteLine(item.UserId);
-//}
-
-//Listing item = listingManager.GetById(1);
-//Console.WriteLine(item.Title);
+UserManager userManager = new UserManager(new EfUserDal());
+LandListingManager landListingManager = new LandListingManager(new EfLandListingDal(),new ListingManager(new EfListingDal()));
+HouseListingManager houseListingManager = new HouseListingManager(new EfHouseListingDal(),new ListingManager(new EfListingDal()));
+List<User> users = new List<User>();
+DataGenerator dataGenarator = new DataGenerator();
 
 
-//Listing item = listingManager.GetById(1);
-//item.Title = "Title";
-//item.Description = "Description";
 
-//listingManager.Update(new Listing
-//{
-//    ListingId = 1,
-//    Description = "Description Test",
-//});
+var userList = dataGenarator.GenerateUsers(100);
+var userIdList = new List<int>();
+foreach (var item in userList)
+{
+    userManager.Add(item);
+    userIdList.Add(item.Id);
+}
 
-//Console.WriteLine(listingManager.GetById(1).Data.Description);
+foreach(var userId in userIdList)
+{
+    var landListings = dataGenarator.GenerateLandListings(5, userId);
+    foreach(var item in landListings)
+    {
+        landListingManager.Add(item);
+    }
+    var houseListings = dataGenarator.GenerateHouseListings(5, userId);
+    foreach (var item in houseListings)
+    {
+        houseListingManager.Add(item);
+    }
+
+}
