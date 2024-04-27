@@ -38,6 +38,7 @@ namespace Business.Concrete
         [SecuredOperation("admin",true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IHouseListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
         public IDataResult<HouseListing> Add(CreateHouseListingReq req)
         {
 
@@ -87,6 +88,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [SecuredOperation("admin",true)]
         [CacheRemoveAspect("IHouseListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Delete(DeleteHouseListingReq req)
         {
             var houseListingToDelete = _houseListingDal.Get(hl => hl.HouseListingId == req.HouseListingId);
@@ -117,6 +119,7 @@ namespace Business.Concrete
         [SecuredOperation("admin,moderator",true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IHouseListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Update(UpdateHouseListingReq req)
         {
             var listingId = _houseListingDal.Get(hl=>hl.HouseListingId == req.HouseListingId).ListingId;
@@ -169,6 +172,8 @@ namespace Business.Concrete
         {
             _houseListingDal.Update(houseListing);
         }
+
+        [CacheAspect(10)]
         public IDataResult<List<HouseListingDto>> GetHouseListingDtos()
         {
             return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings(),Messages.GetHouseListing);

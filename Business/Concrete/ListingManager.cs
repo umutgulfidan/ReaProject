@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.Aspects.Autofac.Caching.CacheAspect;
 
 namespace Business.Concrete
 {
@@ -23,6 +25,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(ListingValidator))]
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Add(Listing entity)
         {
             entity.ListingId = GenerateListingId(entity);
@@ -31,7 +34,7 @@ namespace Business.Concrete
         }
 
 
-
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Delete(Listing entity)
         {
             entity.Status = false;
@@ -39,6 +42,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ListingDeleted);
         }
 
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult DeleteById(int id)
         {
             var result = this.GetById(id).Data;
@@ -56,6 +60,8 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingsByFilter(filter));
         }
+
+        [CacheAspect(10)]
         public IDataResult<List<Listing>> GetAll()
         {
             return new SuccessDataResult<List<Listing>>(_listingDal.GetAll(),Messages.ListingListed);
@@ -74,6 +80,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(ListingValidator))]
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Update(Listing entity)
         {
             _listingDal.Update(entity);

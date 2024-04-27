@@ -2,6 +2,7 @@
 using Business.Constants;
 using Business.Dtos.Requests.LandListingReq;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -15,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.Aspects.Autofac.Caching.CacheAspect;
 
 namespace Business.Concrete
 {
@@ -38,6 +40,8 @@ namespace Business.Concrete
 
 
         [TransactionScopeAspect]
+        [CacheRemoveAspect("ILandListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
         public IDataResult<LandListing>Add(CreateLandListingReq req)
         {
             var listingToAdd = new Listing
@@ -78,6 +82,8 @@ namespace Business.Concrete
         }
 
         [TransactionScopeAspect]
+        [CacheRemoveAspect("ILandListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
         public IResult Delete(DeleteLandListingReq req)
         {
             var landListingToDelete = _landListingDal.Get(ll=>ll.Id == req.Id);
@@ -89,6 +95,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.LandListingDeleted);
         }
 
+        [CacheAspect(10)]
         public IDataResult<List<LandListing>> GetAll()
         {
             return new SuccessDataResult<List<LandListing>>(_landListingDal.GetAll(), Messages.LandListingListed);
@@ -99,6 +106,7 @@ namespace Business.Concrete
             return new SuccessDataResult<LandListing>(_landListingDal.Get(ll=>ll.Id==id),Messages.LandListingListed);
         }
 
+        [CacheAspect(10)]
         public IDataResult<List<LandListingDto>> GetLandListings()
         {
             return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetLandListings(),Messages.LandListingListed);
@@ -117,6 +125,8 @@ namespace Business.Concrete
         }
 
         [TransactionScopeAspect]
+        [CacheRemoveAspect("ILandListingService.Get")]
+        [CacheRemoveAspect("IListingService.Get")]
 
         public IResult Update(UpdateLandListingReq req)
         {
