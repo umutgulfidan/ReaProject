@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Entities.Concrete;
 using Core.Extensions.Claims;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,18 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyuserid")]
-        public IActionResult GetByUserId()
+        public IActionResult GetByUserId(int userId)
+        {
+            var result = _listingService.GetByUserId(userId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
+        }
+        [HttpGet("getbytoken")]
+        public IActionResult GetByToken()
         {
             var userId = HttpContext.User.ClaimUserId();
             if (userId == null)
@@ -47,12 +59,11 @@ namespace WebAPI.Controllers
                 return BadRequest();
             }
             var result = _listingService.GetByUserId(userId);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 return Ok(result);
             }
             return BadRequest(result);
-
         }
 
         [HttpPost("getallbyfilter")]

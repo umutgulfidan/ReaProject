@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("getuserdetails")]
+        [HttpGet("getuserdetailsbytoken")]
         public IActionResult GetUserDetail()
         {
             var userId = HttpContext.User.ClaimUserId();
@@ -31,6 +31,15 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-
+        [HttpGet("getuserdetailsbyid")]
+        public IActionResult GetUserDetailById(int userId)
+        {
+            var result = _userService.GetUserDetailsById(userId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
