@@ -25,4 +25,5 @@ namespace Entities.DTOs
         public bool? Status { get; set; }
 
     }
+
 }
