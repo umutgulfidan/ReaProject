@@ -356,43 +356,45 @@ namespace DataAccess.Concrete.EntityFramework
                     query = query.OrderByDescending(l => l.Date);
                 }
 
-                var paginatedListings = query.Skip(skipAmount).Take(pageSize)
+                var paginatedListings = query
+                    .Skip(skipAmount)
+                    .Take(pageSize)
                     .Join(context.Cities,
-                          listing => listing.CityId,
-                          city => city.Id,
-                          (listing, city) => new { listing, city })
+                        listing => listing.CityId,
+                        city => city.Id,
+                        (listing, city) => new { listing, city })
                     .Join(context.Districts,
-                          listingCity => listingCity.listing.DistrictId,
-                          district => district.Id,
-                          (listingCity, district) => new { listingCity.listing, listingCity.city, district })
+                        listingCity => listingCity.listing.DistrictId,
+                        district => district.Id,
+                        (listingCity, district) => new { listingCity.listing, listingCity.city, district })
                     .Join(context.ListingTypes,
-                          listingDistrict => listingDistrict.listing.ListingTypeId,
-                          listingType => listingType.Id,
-                          (listingDistrict, listingType) => new { listingDistrict.listing, listingDistrict.city, listingDistrict.district, listingType })
+                        listingDistrict => listingDistrict.listing.ListingTypeId,
+                        listingType => listingType.Id,
+                        (listingDistrict, listingType) => new { listingDistrict.listing, listingDistrict.city, listingDistrict.district, listingType })
                     .Join(context.PropertyTypes,
-                          listingTypeCity => listingTypeCity.listing.PropertyTypeId,
-                          propertyType => propertyType.Id,
-                          (listingTypeCity, propertyType) => new { listingTypeCity.listing, listingTypeCity.city, listingTypeCity.district, listingTypeCity.listingType, propertyType })
+                        listingTypeCity => listingTypeCity.listing.PropertyTypeId,
+                        propertyType => propertyType.Id,
+                        (listingTypeCity, propertyType) => new { listingTypeCity.listing, listingTypeCity.city, listingTypeCity.district, listingTypeCity.listingType, propertyType })
                     .GroupJoin(context.ListingImages,
-                               listingInfo => listingInfo.listing.ListingId,
-                               image => image.ListingId,
-                               (listingInfo, images) => new { listingInfo, images })
-                    .SelectMany(listingWithImages => listingWithImages.images.DefaultIfEmpty(),
-                     (listingWithImages, image) => new ListingDto
-                     {
-                         Id = listingWithImages.listingInfo.listing.ListingId,
-                         CityName = listingWithImages.listingInfo.city.CityName,
-                         Date = listingWithImages.listingInfo.listing.Date,
-                         Description = listingWithImages.listingInfo.listing.Description,
-                         DistrictName = listingWithImages.listingInfo.district.DistrictName,
-                         Price = listingWithImages.listingInfo.listing.Price,
-                         SquareMeter = listingWithImages.listingInfo.listing.SquareMeter,
-                         Title = listingWithImages.listingInfo.listing.Title,
-                         ListingTypeName = listingWithImages.listingInfo.listingType.ListingTypeName,
-                         PropertyTypeName = listingWithImages.listingInfo.propertyType.Name,
-                         ImagePath = image != null ? image.ImagePath : defaultImagePath,
-                         Status = listingWithImages.listingInfo.listing.Status
-                     }).ToList();
+                        listingInfo => listingInfo.listing.ListingId,
+                        image => image.ListingId,
+                        (listingInfo, images) => new { listingInfo, images })
+                    .Select(listingWithImages => new ListingDto
+                    {
+                        Id = listingWithImages.listingInfo.listing.ListingId,
+                        CityName = listingWithImages.listingInfo.city.CityName,
+                        Date = listingWithImages.listingInfo.listing.Date,
+                        Description = listingWithImages.listingInfo.listing.Description,
+                        DistrictName = listingWithImages.listingInfo.district.DistrictName,
+                        Price = listingWithImages.listingInfo.listing.Price,
+                        SquareMeter = listingWithImages.listingInfo.listing.SquareMeter,
+                        Title = listingWithImages.listingInfo.listing.Title,
+                        ListingTypeName = listingWithImages.listingInfo.listingType.ListingTypeName,
+                        PropertyTypeName = listingWithImages.listingInfo.propertyType.Name,
+                        ImagePath = listingWithImages.images.FirstOrDefault().ImagePath ?? defaultImagePath,
+                        Status = listingWithImages.listingInfo.listing.Status
+                    })
+                    .ToList();
 
                 return paginatedListings;
 
