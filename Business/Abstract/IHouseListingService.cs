@@ -24,5 +24,6 @@ namespace Business.Abstract
         IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId);
 
         IDataResult<List<HouseListingDto>> GetAllByFilter(HouseFilterObject filter);
+        IDataResult<List<HouseListingDto>> GetPaginatedListingsWithFilterAndSorting(HouseFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
     }
 }

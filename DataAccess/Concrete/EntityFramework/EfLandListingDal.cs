@@ -16,46 +16,123 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public List<LandListingDto> GetAllByFilter(LandListingFilterObject filter)
         {
-            using(ReaContext context = new ReaContext())
+            using (ReaContext context = new ReaContext())
             {
-                var query = GetAllDtosQuery(context);
-                if (!filter.SearchText.IsNullOrEmpty())
+                var defaultImagePath = PathConstants.DefaultListingImagePath;
+
+                var query = context.LandListings
+                    .Join(context.Listings,
+                          landListing => landListing.ListingId,
+                          listing => listing.ListingId,
+                          (landListing, listing) => new { landListing, listing })
+                    .Join(context.Cities,
+                          houseListingListing => houseListingListing.listing.CityId,
+                          city => city.Id,
+                          (houseListingListing, city) => new { houseListingListing.landListing, houseListingListing.listing, city })
+                    .Join(context.Districts,
+                          houseListingCity => houseListingCity.listing.DistrictId,
+                          district => district.Id,
+                          (houseListingCity, district) => new { houseListingCity.landListing, houseListingCity.listing, houseListingCity.city, district })
+                    .Join(context.ListingTypes,
+                          houseListingType => houseListingType.listing.ListingTypeId,
+                          listingType => listingType.Id,
+                          (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
+                    .GroupJoin(context.ListingImages,
+                               landListingTypeInfo => landListingTypeInfo.listing.ListingId,
+                               image => image.ListingId,
+                               (landListingTypeInfo, images) => new { landListingTypeInfo, images });
+
+                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true);
+
+
+                if (filter != null)
                 {
-                        query = query.Where(l=>l.ListingId.ToString() == filter.SearchText || l.Title.Contains( filter.SearchText));
+                    if (!filter.SearchText.IsNullOrEmpty())
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.ListingId.ToString() == filter.SearchText || l.landListingTypeInfo.listing.Title.Contains(filter.SearchText));
+                    }
+                    if (filter.ListingTypeId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.ListingTypeId == filter.ListingTypeId);
+                    }
+                    if (filter.CityId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.CityId == filter.CityId);
+                    }
+                    if (filter.DistrictId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.DistrictId == filter.DistrictId);
+                    }
+                    if (filter.MinPrice.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.Price >= filter.MinPrice);
+                    }
+                    if (filter.MaxPrice.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.Price <= filter.MaxPrice);
+                    }
+                    if (filter.MinSquareMeter.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.SquareMeter >= filter.MinSquareMeter);
+                    }
+                    if (filter.MaxSquareMeter.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.SquareMeter <= filter.MaxSquareMeter);
+                    }
+                    if (filter.FloorEquivalent.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.landListing.FloorEquivalent == filter.FloorEquivalent);
+                    }
                 }
-                if (!filter.ListingTypeName.IsNullOrEmpty())
+
+                var result = query.SelectMany(landListingWithImages => landListingWithImages.images.DefaultIfEmpty(),
+                        (landListingWithImages, image) => new LandListingDto
+                        {
+                            Id = landListingWithImages.landListingTypeInfo.landListing.Id,
+                            ListingId = landListingWithImages.landListingTypeInfo.listing.ListingId,
+                            SquareMeter = landListingWithImages.landListingTypeInfo.listing.SquareMeter,
+                            CityName = landListingWithImages.landListingTypeInfo.city.CityName,
+                            DistrictName = landListingWithImages.landListingTypeInfo.district.DistrictName,
+                            Title = landListingWithImages.landListingTypeInfo.listing.Title,
+                            Description = landListingWithImages.landListingTypeInfo.listing.Description,
+                            Price = landListingWithImages.landListingTypeInfo.listing.Price,
+                            ListingTypeName = landListingWithImages.landListingTypeInfo.listingType.ListingTypeName,
+                            ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                            Date = landListingWithImages.landListingTypeInfo.listing.Date,
+                            ParcelNo = landListingWithImages.landListingTypeInfo.landListing.ParcelNo,
+                            IslandNo = landListingWithImages.landListingTypeInfo.landListing.IslandNo,
+                            SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
+                            FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
+                            Address = landListingWithImages.landListingTypeInfo.listing.Address,
+                            Status = landListingWithImages.landListingTypeInfo.listing.Status
+                        })
+                .AsEnumerable()
+                .GroupBy(dto => dto.ListingId)
+                .Select(group => new LandListingDto
                 {
-                    query = query.Where(l => l.ListingTypeName == filter.ListingTypeName);
-                }
-                if (!filter.CityName.IsNullOrEmpty())
-                {
-                    query = query.Where(l=>l.CityName==filter.CityName);
-                }
-                if(!filter.DistrictName.IsNullOrEmpty())
-                {
-                    query = query.Where(l=>l.DistrictName==filter.DistrictName);
-                }
-                if (filter.MinPrice.HasValue)
-                {
-                    query = query.Where(l=>l.Price >= filter.MinPrice);
-                }
-                if(filter.MaxPrice.HasValue)
-                {
-                    query = query.Where(l=>l.Price <= filter.MaxPrice);
-                }
-                if(filter.MinSquareMeter.HasValue)
-                {
-                    query = query.Where(l=>l.SquareMeter >= filter.MinSquareMeter);
-                }
-                if (filter.MaxSquareMeter.HasValue)
-                {
-                    query = query.Where(l=>l.SquareMeter <= filter.MaxSquareMeter);
-                }
-                if (filter.FloorEquivalent.HasValue)
-                {
-                    query = query.Where(l => l.FloorEquivalent == filter.FloorEquivalent);
-                }
-                var result = GetResultOfQuerry(query);
+                    Id = group.First().Id,
+                    ListingId = group.First().ListingId,
+                    Title = group.First().Title,
+                    Description = group.First().Description,
+                    CityName = group.First().CityName,
+                    DistrictName = group.First().DistrictName,
+                    ListingTypeName = group.First().ListingTypeName,
+                    Price = group.First().Price,
+                    Date = group.First().Date,
+                    SquareMeter = group.First().SquareMeter,
+                    FloorEquivalent = group.First().FloorEquivalent,
+                    IslandNo = group.First().IslandNo,
+                    ParcelNo = group.First().ParcelNo,
+                    SheetNo = group.First().SheetNo,
+                    Address = group.First().Address,
+                    Status = group.First().Status,
+
+
+                    // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
+                    ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
+                })
+                .OrderByDescending(dto => dto.Date)
+                .ToList();
                 return result;
             }
 
@@ -105,6 +182,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 ListingTypeName = listingType.ListingTypeName,
                                 
 
+
                             };
 
                 return query.First();
@@ -115,9 +193,80 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (ReaContext context = new ReaContext())
             {
-                IQueryable<LandListingDto> query = GetAllDtosQuery(context);
+                var defaultImagePath = PathConstants.DefaultListingImagePath;
 
-                List<LandListingDto> result = GetResultOfQuerry(query);
+                var query = context.LandListings
+                    .Join(context.Listings,
+                          landListing => landListing.ListingId,
+                          listing => listing.ListingId,
+                          (landListing, listing) => new { landListing, listing })
+                    .Join(context.Cities,
+                          houseListingListing => houseListingListing.listing.CityId,
+                          city => city.Id,
+                          (houseListingListing, city) => new { houseListingListing.landListing, houseListingListing.listing, city })
+                    .Join(context.Districts,
+                          houseListingCity => houseListingCity.listing.DistrictId,
+                          district => district.Id,
+                          (houseListingCity, district) => new { houseListingCity.landListing, houseListingCity.listing, houseListingCity.city, district })
+                    .Join(context.ListingTypes,
+                          houseListingType => houseListingType.listing.ListingTypeId,
+                          listingType => listingType.Id,
+                          (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
+                    .GroupJoin(context.ListingImages,
+                               landListingTypeInfo => landListingTypeInfo.listing.ListingId,
+                               image => image.ListingId,
+                               (landListingTypeInfo, images) => new { landListingTypeInfo, images })
+                    .SelectMany(landListingWithImages => landListingWithImages.images.DefaultIfEmpty(),
+                        (landListingWithImages, image) => new LandListingDto
+                        {
+                            Id = landListingWithImages.landListingTypeInfo.landListing.Id,
+                            ListingId = landListingWithImages.landListingTypeInfo.listing.ListingId,
+                            SquareMeter = landListingWithImages.landListingTypeInfo.listing.SquareMeter,
+                            CityName = landListingWithImages.landListingTypeInfo.city.CityName,
+                            DistrictName = landListingWithImages.landListingTypeInfo.district.DistrictName,
+                            Title = landListingWithImages.landListingTypeInfo.listing.Title,
+                            Description = landListingWithImages.landListingTypeInfo.listing.Description,
+                            Price = landListingWithImages.landListingTypeInfo.listing.Price,
+                            ListingTypeName = landListingWithImages.landListingTypeInfo.listingType.ListingTypeName,
+                            ImagePath = image != null ? image.ImagePath : defaultImagePath,
+                            Date = landListingWithImages.landListingTypeInfo.listing.Date,
+                            ParcelNo = landListingWithImages.landListingTypeInfo.landListing.ParcelNo,
+                            IslandNo = landListingWithImages.landListingTypeInfo.landListing.IslandNo,
+                            SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
+                            FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
+                            Address = landListingWithImages.landListingTypeInfo.listing.Address,
+                            Status = landListingWithImages.landListingTypeInfo.listing.Status,
+                        });
+
+                query = query.Where(dto => dto.Status == true);
+
+                var result = query
+                .AsEnumerable()
+                .GroupBy(dto => dto.ListingId)
+                .Select(group => new LandListingDto
+                {
+                    Id = group.First().Id,
+                    ListingId = group.First().ListingId,
+                    Title = group.First().Title,
+                    Description = group.First().Description,
+                    CityName = group.First().CityName,
+                    DistrictName = group.First().DistrictName,
+                    ListingTypeName = group.First().ListingTypeName,
+                    Price = group.First().Price,
+                    Date = group.First().Date,
+                    SquareMeter = group.First().SquareMeter,
+                    FloorEquivalent = group.First().FloorEquivalent,
+                    IslandNo = group.First().IslandNo,
+                    ParcelNo = group.First().ParcelNo,
+                    SheetNo = group.First().SheetNo,
+                    Address = group.First().Address,
+
+
+                    // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
+                    ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
+                })
+                .OrderByDescending(dto => dto.Date)
+                .ToList();
 
                 return result;
             }
@@ -125,87 +274,141 @@ namespace DataAccess.Concrete.EntityFramework
 
         }
 
-        private static List<LandListingDto> GetResultOfQuerry(IQueryable<LandListingDto> query)
+        public List<LandListingDto> GetPaginatedListingsWithFilterAndSorting(LandListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize)
         {
-            var result = query
-           .AsEnumerable()
-            .GroupBy(dto => dto.ListingId)
-            .Select(group => new LandListingDto
+            using (ReaContext context = new ReaContext())
             {
-                Id = group.First().Id,
-                ListingId = group.First().ListingId,
-                Title = group.First().Title,
-                Description = group.First().Description,
-                CityName = group.First().CityName,
-                DistrictName = group.First().DistrictName,
-                ListingTypeName = group.First().ListingTypeName,
-                Price = group.First().Price,
-                Date = group.First().Date,
-                SquareMeter = group.First().SquareMeter,
-                FloorEquivalent = group.First().FloorEquivalent,
-                IslandNo = group.First().IslandNo,
-                ParcelNo = group.First().ParcelNo,
-                SheetNo = group.First().SheetNo,
-                Address = group.First().Address,
+                var defaultImagePath = PathConstants.DefaultListingImagePath;
+
+                var query = context.LandListings
+                    .Join(context.Listings,
+                          landListing => landListing.ListingId,
+                          listing => listing.ListingId,
+                          (landListing, listing) => new { landListing, listing })
+                    .Join(context.Cities,
+                          houseListingListing => houseListingListing.listing.CityId,
+                          city => city.Id,
+                          (houseListingListing, city) => new { houseListingListing.landListing, houseListingListing.listing, city })
+                    .Join(context.Districts,
+                          houseListingCity => houseListingCity.listing.DistrictId,
+                          district => district.Id,
+                          (houseListingCity, district) => new { houseListingCity.landListing, houseListingCity.listing, houseListingCity.city, district })
+                    .Join(context.ListingTypes,
+                          houseListingType => houseListingType.listing.ListingTypeId,
+                          listingType => listingType.Id,
+                          (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
+                    .GroupJoin(context.ListingImages,
+                               landListingTypeInfo => landListingTypeInfo.listing.ListingId,
+                               image => image.ListingId,
+                               (landListingTypeInfo, images) => new { landListingTypeInfo, images });
+
+                //Filtreleme
+                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true);
 
 
-                // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
-                ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
-            })
-            .OrderByDescending(dto => dto.Date)
-             .ToList();
-            return result;
-        }
-
-        private static IQueryable<LandListingDto> GetAllDtosQuery(ReaContext context)
-        {
-            var defaultImagePath = PathConstants.DefaultListingImagePath;
-
-            var query = context.LandListings
-                .Join(context.Listings,
-                      landListing => landListing.ListingId,
-                      listing => listing.ListingId,
-                      (landListing, listing) => new { landListing, listing })
-                .Join(context.Cities,
-                      houseListingListing => houseListingListing.listing.CityId,
-                      city => city.Id,
-                      (houseListingListing, city) => new { houseListingListing.landListing, houseListingListing.listing, city })
-                .Join(context.Districts,
-                      houseListingCity => houseListingCity.listing.DistrictId,
-                      district => district.Id,
-                      (houseListingCity, district) => new { houseListingCity.landListing, houseListingCity.listing, houseListingCity.city, district })
-                .Join(context.ListingTypes,
-                      houseListingType => houseListingType.listing.ListingTypeId,
-                      listingType => listingType.Id,
-                      (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
-                .GroupJoin(context.ListingImages,
-                           landListingTypeInfo => landListingTypeInfo.listing.ListingId,
-                           image => image.ListingId,
-                           (landListingTypeInfo, images) => new { landListingTypeInfo, images })
-                .SelectMany(landListingWithImages => landListingWithImages.images.DefaultIfEmpty(),
-                    (landListingWithImages, image) => new LandListingDto
+                if (filter != null)
+                {
+                    if (!filter.SearchText.IsNullOrEmpty())
                     {
-                        Id = landListingWithImages.landListingTypeInfo.landListing.Id,
-                        ListingId = landListingWithImages.landListingTypeInfo.listing.ListingId,
-                        SquareMeter = landListingWithImages.landListingTypeInfo.listing.SquareMeter,
-                        CityName = landListingWithImages.landListingTypeInfo.city.CityName,
-                        DistrictName = landListingWithImages.landListingTypeInfo.district.DistrictName,
-                        Title = landListingWithImages.landListingTypeInfo.listing.Title,
-                        Description = landListingWithImages.landListingTypeInfo.listing.Description,
-                        Price = landListingWithImages.landListingTypeInfo.listing.Price,
-                        ListingTypeName = landListingWithImages.landListingTypeInfo.listingType.ListingTypeName,
-                        ImagePath = image != null ? image.ImagePath : defaultImagePath,
-                        Date = landListingWithImages.landListingTypeInfo.listing.Date,
-                        ParcelNo = landListingWithImages.landListingTypeInfo.landListing.ParcelNo,
-                        IslandNo = landListingWithImages.landListingTypeInfo.landListing.IslandNo,
-                        SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
-                        FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
-                        Address = landListingWithImages.landListingTypeInfo.listing.Address,
-                        Status = landListingWithImages.landListingTypeInfo.listing.Status
-                    });
+                        query = query.Where(l => l.landListingTypeInfo.listing.ListingId.ToString() == filter.SearchText || l.landListingTypeInfo.listing.Title.Contains(filter.SearchText));
+                    }
+                    if (filter.ListingTypeId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.ListingTypeId == filter.ListingTypeId);
+                    }
+                    if (filter.CityId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.CityId == filter.CityId);
+                    }
+                    if (filter.DistrictId.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.DistrictId == filter.DistrictId);
+                    }
+                    if (filter.MinPrice.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.Price >= filter.MinPrice);
+                    }
+                    if (filter.MaxPrice.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.Price <= filter.MaxPrice);
+                    }
+                    if (filter.MinSquareMeter.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.SquareMeter >= filter.MinSquareMeter);
+                    }
+                    if (filter.MaxSquareMeter.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.listing.SquareMeter <= filter.MaxSquareMeter);
+                    }
+                    if (filter.FloorEquivalent.HasValue)
+                    {
+                        query = query.Where(l => l.landListingTypeInfo.landListing.FloorEquivalent == filter.FloorEquivalent);
+                    }
+                }
 
-            query = query.Where(dto => dto.Status == true);
-            return query;
+                //Sıralama
+                if (sorting != null && !string.IsNullOrEmpty(sorting.SortBy))
+                {
+                    switch (sorting.SortBy.ToLower())
+                    {
+                        case "date":
+                            query = sorting.SortDirection == SortDirection.Ascending ?
+                                query.OrderBy(l => l.landListingTypeInfo.listing.Date) :
+                                query.OrderByDescending(l => l.landListingTypeInfo.listing.Date);
+                            break;
+                        case "price":
+                            query = sorting.SortDirection == SortDirection.Ascending ?
+                                query.OrderBy(l => l.landListingTypeInfo.listing.Price) :
+                                query.OrderByDescending(l => l.landListingTypeInfo.listing.Price);
+                            break;
+                        case "squaremeter":
+                            query = sorting.SortDirection == SortDirection.Ascending ?
+                            query.OrderBy(l => l.landListingTypeInfo.listing.SquareMeter) :
+                            query.OrderByDescending(l => l.landListingTypeInfo.listing.SquareMeter);
+                            break;
+                        // Diğer sıralama seçenekleri buraya eklenebilir
+                        default:
+                            // Varsayılan olarak belirli bir sütuna göre sırala
+                            query = query.OrderByDescending(l => l.landListingTypeInfo.listing.Date);
+                            break;
+                    }
+                }
+                else
+                {
+                    query = query.OrderByDescending(l => l.landListingTypeInfo.listing.Date);
+                }
+
+
+                var result = query
+                .AsEnumerable()
+                .GroupBy(dto => dto.landListingTypeInfo.listing.ListingId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(group => new LandListingDto
+                {
+                    Id = group.First().landListingTypeInfo.landListing.Id,
+                    Title = group.First().landListingTypeInfo.listing.Title,
+                    Description = group.First().landListingTypeInfo.listing.Description,
+                    CityName = group.First().landListingTypeInfo.city.CityName,
+                    DistrictName = group.First().landListingTypeInfo.district.DistrictName,
+                    ListingTypeName = group.First().landListingTypeInfo.listingType.ListingTypeName,
+                    Price = group.First().landListingTypeInfo.listing.Price,
+                    Date = group.First().landListingTypeInfo.listing.Date,
+                    SquareMeter = group.First().landListingTypeInfo.listing.SquareMeter,
+                    ParcelNo = group.First().landListingTypeInfo.landListing.ParcelNo,
+                    Address = group.First().landListingTypeInfo.listing.Address,
+                    FloorEquivalent = group.First().landListingTypeInfo.landListing.FloorEquivalent,
+                    IslandNo = group.First().landListingTypeInfo.landListing.IslandNo,
+                    ListingId = group.First().landListingTypeInfo.listing.ListingId,
+                    SheetNo = group.First().landListingTypeInfo.landListing.SheetNo,
+                    Status = group.First().landListingTypeInfo.listing.Status,
+
+                    // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
+                    ImagePath = group.SelectMany(dto => dto.images).Select(img => img.ImagePath).FirstOrDefault() ?? PathConstants.DefaultListingImagePath
+                })
+                .ToList();
+                return result;
+            }
         }
     }
 }

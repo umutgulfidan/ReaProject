@@ -170,5 +170,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetAllByFilter(filter),Messages.LandListingFiltered);
         }
+
+        public IDataResult<List<LandListingDto>> GetPaginatedListingsWithFilterAndSorting(LandListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize)
+        {
+            return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetPaginatedListingsWithFilterAndSorting(filter, sorting, pageNumber, pageSize));
+        }
     }
 }

@@ -89,8 +89,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult GetById(int id) {
+        public IActionResult GetById(int id)
+        {
             var result = _listingService.GetById(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getpaginatedlistings")]
+        public IActionResult GetPaginatedListings([FromQuery] ListingFilterObject filter, [FromQuery] SortingObject sorting, int pageNumber, int pageSize)
+        {
+            var result = _listingService.GetPaginatedListingsWithFilterAndSorting(filter, sorting, pageNumber, pageSize);
             if (result.IsSuccess)
             {
                 return Ok(result);
