@@ -12,14 +12,18 @@ HouseListingManager houseListingManager = new HouseListingManager(new EfHouseLis
 List<User> users = new List<User>();
 DataGenerator dataGenarator = new DataGenerator();
 
+var userCount = 0;
+var userListingCount = 0;
 
-
-var userList = dataGenarator.GenerateUsers(100);
+var generateUserNumber = 100;
+var userList = dataGenarator.GenerateUsers(generateUserNumber);
 var userIdList = new List<int>();
 foreach (var item in userList)
 {
     userManager.Add(item);
     userIdList.Add(item.Id);
+    userCount++;
+    Console.WriteLine("User Ekleniyor : "+userCount+"/"+generateUserNumber);
 }
 
 foreach(var userId in userIdList)
@@ -34,5 +38,9 @@ foreach(var userId in userIdList)
     {
         houseListingManager.Add(item);
     }
+    userListingCount++;
+    Console.WriteLine("Userların İlanları Ekleniyor: "+userListingCount+"/"+generateUserNumber);
 
 }
+Console.Clear();
+Console.WriteLine("İşlem Başarıyla Tamamlandı");
