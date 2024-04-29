@@ -107,5 +107,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<ListingDto>>(_listingDal.GetListingDetailsByUserId(userId),Messages.ListingListed);
         }
+
+        public IDataResult<List<ListingDto>> GetPaginatedListingsWithFilterAndSorting(ListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize)
+        {
+            return new SuccessDataResult<List<ListingDto>>(_listingDal.GetPaginatedListingsWithFilterAndSorting( filter, sorting, pageNumber, pageSize));
+        }
     }
 }

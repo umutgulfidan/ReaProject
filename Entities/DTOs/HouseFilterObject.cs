@@ -13,10 +13,10 @@ namespace Entities.DTOs
         public int? BathroomCount { get; set; }
         public int? LivingRoomCount { get; set; }
 
-        public string? ListingTypeName { get; set; }
-        public string? HouseTypeName { get; set; }
-        public string? CityName { get; set; }
-        public string? DistrictName { get; set; }
+        public int? ListingTypeId { get; set; }
+        public int? HouseTypeId { get; set; }
+        public int? CityId { get; set; }
+        public int? DistrictId { get; set; }
 
         public int? MaxPrice { get; set; }
         public int? MinPrice { get; set; }

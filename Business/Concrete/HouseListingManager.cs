@@ -23,7 +23,7 @@ namespace Business.Concrete
     {
         IHouseListingDal _houseListingDal;
         IListingService _listingService;
-        public HouseListingManager(IHouseListingDal houseListingDal,IListingService listingService)
+        public HouseListingManager(IHouseListingDal houseListingDal, IListingService listingService)
         {
             _houseListingDal = houseListingDal;
             _listingService = listingService;
@@ -35,7 +35,7 @@ namespace Business.Concrete
             _houseListingDal.Add(houseListing);
         }
 
-        [SecuredOperation("admin",true)]
+        [SecuredOperation("admin", true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IHouseListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]
@@ -57,7 +57,7 @@ namespace Business.Concrete
                 UserId = req.UserId,
                 Status = req.Status,
             };
-            
+
             _listingService.Add(listingToAdd);
 
             var id = listingToAdd.ListingId;
@@ -82,11 +82,11 @@ namespace Business.Concrete
             };
 
             this.AddHouseListing(houseListingToAdd);
-            return new SuccessDataResult<HouseListing>(houseListingToAdd,Messages.HouseListingAdded);
+            return new SuccessDataResult<HouseListing>(houseListingToAdd, Messages.HouseListingAdded);
         }
 
         [TransactionScopeAspect]
-        [SecuredOperation("admin",true)]
+        [SecuredOperation("admin", true)]
         [CacheRemoveAspect("IHouseListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]
         public IResult Delete(DeleteHouseListingReq req)
@@ -100,29 +100,29 @@ namespace Business.Concrete
             _listingService.Delete(listingToDelete);
 
             return new SuccessResult(Messages.HouseListingDeleted);
-            
+
         }
 
         [CacheAspect(10)]
 
         public IDataResult<List<HouseListing>> GetAll()
         {
-            return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll(),Messages.HouseListingListed);
+            return new SuccessDataResult<List<HouseListing>>(_houseListingDal.GetAll(), Messages.HouseListingListed);
         }
 
         [CacheAspect(10)]
         public IDataResult<HouseListing> GetById(int id)
         {
-             return new SuccessDataResult<HouseListing>(_houseListingDal.Get(hl=>hl.HouseListingId==id),Messages.HouseListingListed) ;
+            return new SuccessDataResult<HouseListing>(_houseListingDal.Get(hl => hl.HouseListingId == id), Messages.HouseListingListed);
         }
 
-        [SecuredOperation("admin,moderator",true)]
+        [SecuredOperation("admin,moderator", true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IHouseListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]
         public IResult Update(UpdateHouseListingReq req)
         {
-            var listingId = _houseListingDal.Get(hl=>hl.HouseListingId == req.HouseListingId).ListingId;
+            var listingId = _houseListingDal.Get(hl => hl.HouseListingId == req.HouseListingId).ListingId;
 
             var houseListingToUpdate = new HouseListing()
             {
@@ -176,18 +176,23 @@ namespace Business.Concrete
         [CacheAspect(10)]
         public IDataResult<List<HouseListingDto>> GetHouseListingDtos()
         {
-            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings(),Messages.GetHouseListing);
+            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetHouseListings(), Messages.GetHouseListing);
         }
 
         public IDataResult<HouseListingDetailDto> GetHouseListingDetail(int listingId)
         {
-            return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId),Messages.GetHouseListingDetails);
+            return new SuccessDataResult<HouseListingDetailDto>(_houseListingDal.GetHouseListingDetails(listingId), Messages.GetHouseListingDetails);
         }
 
         public IDataResult<List<HouseListingDto>> GetAllByFilter(HouseFilterObject filter)
         {
             var data = _houseListingDal.GetHouseListingsByFilter(filter);
             return new SuccessDataResult<List<HouseListingDto>>(data);
+        }
+
+        public IDataResult<List<HouseListingDto>> GetPaginatedListingsWithFilterAndSorting(HouseFilterObject filter, SortingObject sorting, int pageNumber, int pageSize)
+        {
+            return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetPaginatedListingsWithFilterAndSorting(filter,sorting,pageNumber,pageSize));
         }
     }
 }

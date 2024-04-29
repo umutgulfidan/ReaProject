@@ -14,5 +14,6 @@ namespace DataAccess.Abstract
         List<HouseListingDto> GetHouseListings();
         List<HouseListingDto> GetHouseListingsByFilter(HouseFilterObject filter);
         HouseListingDetailDto GetHouseListingDetails(int listingId);
+        List<HouseListingDto> GetPaginatedListingsWithFilterAndSorting(HouseFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
     }
 }

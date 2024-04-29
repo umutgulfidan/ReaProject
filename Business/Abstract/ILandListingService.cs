@@ -21,5 +21,6 @@ namespace Business.Abstract
         IResult Update(UpdateLandListingReq req);
         IDataResult<List<LandListing>> GetAll();
         IDataResult<LandListing> GetById(int id);
+        IDataResult<List<LandListingDto>> GetPaginatedListingsWithFilterAndSorting(LandListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
     }
 }

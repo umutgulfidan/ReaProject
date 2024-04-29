@@ -14,5 +14,6 @@ namespace DataAccess.Abstract
         List<ListingDto> GetListingDetails();
         List<ListingDto> GetListingDetailsByUserId(int id);
         List<ListingDto> GetListingsByFilter(ListingFilterObject filter);
+        List<ListingDto> GetPaginatedListingsWithFilterAndSorting(ListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
     }
 }
