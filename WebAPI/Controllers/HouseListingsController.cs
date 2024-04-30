@@ -46,10 +46,10 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("getpaginatedlistings")]
-        public IActionResult GetPaginatedListings([FromQuery] HouseFilterObject filter, [FromQuery] SortingObject sorting, int pageNumber, int pageSize)
+        [HttpPost("getpaginatedlistings")]
+        public IActionResult GetPaginatedListings([FromBody] HouseListingRequestModel requestModel)
         {
-            var result = _houseListingService.GetPaginatedListingsWithFilterAndSorting(filter, sorting, pageNumber, pageSize);
+            var result = _houseListingService.GetPaginatedListingsWithFilterAndSorting(requestModel.Filter, requestModel.Sorting, requestModel.PageNumber, requestModel.PageSize);
             if (result.IsSuccess)
             {
                 return Ok(result);

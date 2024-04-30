@@ -18,7 +18,7 @@ namespace ConsoleUI
         Faker<CreateHouseListingReq> houseListingModel;
         public DataGenerator()
         {
-            Randomizer.Seed = new Random(546578921);
+            Randomizer.Seed = new Random();
 
             userModel = new Faker<User>()
                 .RuleFor(u => u.FirstName, f => f.Name.FirstName())
