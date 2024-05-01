@@ -35,12 +35,10 @@ Proje raporuna [Rapor] linkinden erişebilirsiniz.
 
 ## Hazırlayanlar
 
-- Ahmet Efe Tosun
-- Umut Gülfidan
-- Utku Genç
+- Ahmet Efe Tosun - ahefto@gmail.com
+- Umut Gülfidan - umutgulfidan41@gmail.com
+- Utku Genç - utkugenc2003@gmail.com
 
-## İletişim
--Herhangi bir sorunuz ya da probleminiz olması durumunda bana : 'umutgulfidan41@gmail.com'  adresinden ulaşabilirsiniz
 
 
 ## ReaProject - EN
@@ -76,9 +74,6 @@ You can access the project report via the [Report] link.
 
 ## Contributors
 
-- Ahmet Efe Tosun
-- Umut Gülfidan
-- Utku Genç
-
-## Contact
-- If you have any questions or problems, you can reach me at: 'umutgulfidan41@gmail.com'
+- Ahmet Efe Tosun - ahefto@gmail.com
+- Umut Gülfidan - umutgulfidan41@gmail.com
+- Utku Genç - utkugenc2003@gmail.com
