@@ -39,5 +39,5 @@ Proje raporuna [Rapor] linkinden erişebilirsiniz.
 - Umut Gülfidan
 - Utku Genç
 
-##İletişim
+## İletişim
 -Herhangi bir sorunuz ya da probleminiz olması durumunda bana : 'umutgulfidan41@gmail.com'  adresinden ulaşabilirsiniz
