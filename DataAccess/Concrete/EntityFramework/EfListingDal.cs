@@ -17,6 +17,15 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfListingDal : EfRepositoryBase<ReaContext, Listing>, IListingDal
     {
+        public List<ListingDetailsView> GetView()
+        {
+            using(ReaContext context = new ReaContext())
+            {
+                var result = context.ListingDetailsView.ToList();
+                return result;
+            }
+        }
+
         public List<ListingDto> GetListingsByFilter(ListingFilterObject filter)
         {
             using (ReaContext context = new ReaContext())

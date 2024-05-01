@@ -32,6 +32,10 @@ namespace Business.Concrete
             _listingDal.Add(entity);
             return new SuccessResult(Messages.ListingAdded);
         }
+        public IDataResult<List<ListingDetailsView>> GetView()
+        {
+            return new SuccessDataResult<List<ListingDetailsView>>(_listingDal.GetView(),"View başarıyla getirildi");
+        }
 
 
         [CacheRemoveAspect("IListingService.Get")]

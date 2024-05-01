@@ -12,6 +12,7 @@ namespace Business.Abstract
 {
     public interface IListingService
     {
+        IDataResult<List<ListingDetailsView>> GetView();
         IResult Add(Listing entity);
         IResult Delete(Listing entity);
         IResult DeleteById(int id);
