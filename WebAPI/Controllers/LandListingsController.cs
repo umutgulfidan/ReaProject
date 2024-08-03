@@ -99,7 +99,6 @@ namespace WebAPI.Controllers
             {
                 return BadRequest();
             }
-            req.UserId = userId;
 
             var result = _landListingService.Update(req);
             if (result.IsSuccess)
