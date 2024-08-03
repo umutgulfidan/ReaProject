@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects;
 using Business.Constants;
 using Business.Dtos.Requests.LandListingReq;
 using Business.ValidationRules.FluentValidation;
@@ -38,7 +39,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.LandListingAdded);
         }
 
-
+        [SecuredOperation("admin", true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ILandListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]
@@ -81,6 +82,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.LandListingDeleted);
         }
 
+        [SecuredOperation("admin", true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ILandListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]
@@ -116,6 +118,7 @@ namespace Business.Concrete
             return new SuccessDataResult<LandListingDetailDto>(_landListingDal.GetLandListingDetail(listingId),Messages.GetLandListingDetail);
         }
 
+
         [ValidationAspect(typeof (LandListingValidator))]
         public IResult LandListingUpdate(LandListing landListing)
         {
@@ -124,6 +127,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.LandListingUpdated);
         }
 
+        [SecuredOperation("admin",true)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ILandListingService.Get")]
         [CacheRemoveAspect("IListingService.Get")]

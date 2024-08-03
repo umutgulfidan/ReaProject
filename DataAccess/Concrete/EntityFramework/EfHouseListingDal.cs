@@ -301,6 +301,7 @@ namespace DataAccess.Concrete.EntityFramework
                             {
                                 //HouseListing
                                 Id = houseListing.HouseListingId,
+                               
 
                                 RoomCount = houseListing.RoomCount,
                                 BathroomCount = houseListing.BathroomCount,
@@ -334,7 +335,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 //ListingType
                                 ListingTypeName = listingType.ListingTypeName,
                                 //HouseType
-                                HouseTypeName = houseType.Name
+                                HouseTypeName = houseType.Name,
 
                             };
 

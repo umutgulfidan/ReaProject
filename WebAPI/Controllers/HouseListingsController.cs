@@ -86,7 +86,6 @@ namespace WebAPI.Controllers
         public IActionResult Update(UpdateHouseListingReq req)
         {
             var userId = HttpContext.User.ClaimUserId();
-            req.UserId = userId;
 
             var result = _houseListingService.Update(req);
             if (result.IsSuccess)
