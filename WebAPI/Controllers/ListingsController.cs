@@ -119,6 +119,36 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getlistingcount")]
+        public IActionResult GetListingCount()
+        {
+            var result = _listingService.GetListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getactivelistingcount")]
+        public IActionResult GetActiveListingCount()
+        {
+            var result = _listingService.GetActiveListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getpassivelistingcount")]
+        public IActionResult GetPassiveListingCount()
+        {
+            var result = _listingService.GetPassiveListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
     }
 }
