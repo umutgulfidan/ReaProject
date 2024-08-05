@@ -116,5 +116,20 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<ListingDto>>(_listingDal.GetPaginatedListingsWithFilterAndSorting( filter, sorting, pageNumber, pageSize));
         }
+
+        public IDataResult<int> GetListingCount()
+        {
+            return new SuccessDataResult<int>(_listingDal.GetAll().Count);
+        }
+
+        public IDataResult<int> GetActiveListingCount()
+        {
+            return new SuccessDataResult<int>(_listingDal.GetAll().Where(l=> l.Status==true).Count());
+        }
+
+        public IDataResult<int> GetPassiveListingCount()
+        {
+            return new SuccessDataResult<int>(_listingDal.GetAll().Where(l=>l.Status==false).Count());
+        }
     }
 }

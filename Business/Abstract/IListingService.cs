@@ -23,5 +23,8 @@ namespace Business.Abstract
         IDataResult<List<ListingDto>> GetListingDetails();
         IDataResult<List<ListingDto>> GetByFilter(ListingFilterObject filter);
         IDataResult<List<ListingDto>> GetPaginatedListingsWithFilterAndSorting(ListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
+        IDataResult<int> GetListingCount();
+        IDataResult<int> GetActiveListingCount();
+        IDataResult<int> GetPassiveListingCount();
     }
 }

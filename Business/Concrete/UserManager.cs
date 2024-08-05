@@ -62,5 +62,20 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccessResult(Messages.UserUpdated);
         }
+
+        public IDataResult<int> GetUserCount()
+        {
+            return new SuccessDataResult<int>(_userDal.GetAll().Count);
+        }
+
+        public IDataResult<int> GetActiveUserCount()
+        {
+            return new SuccessDataResult<int>(_userDal.GetAll().Where(u=> u.Status == true).Count());
+        }
+
+        public IDataResult<int> GetPassiveUserCount()
+        {
+            return new SuccessDataResult<int>(_userDal.GetAll().Where(u=>u.Status == false).Count());
+        }
     }
 }
