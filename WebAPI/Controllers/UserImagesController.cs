@@ -100,5 +100,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("getprofileimagepath")]
+        public IActionResult GetProfileImage(int userId)
+        {
+            var result = _userImageService.GetProfileImagePath(userId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

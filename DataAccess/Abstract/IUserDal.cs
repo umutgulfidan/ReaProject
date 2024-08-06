@@ -13,5 +13,6 @@ namespace DataAccess.Abstract
     {
         List<OperationClaim> GetClaims(User user);
         UserDetailDto GetUserDetail(int id);
+        List<UserDetailDto> GetLatestUsers(int userCount);
     }
 }

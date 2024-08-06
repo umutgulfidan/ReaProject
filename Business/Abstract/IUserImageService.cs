@@ -19,5 +19,7 @@ namespace Business.Abstract
         IResult DeleteAll(int userId);
         IResult Update(IFormFile formFile, UserImage userImage);
 
+        IDataResult<string> GetProfileImagePath(int userId);
+
     }
 }

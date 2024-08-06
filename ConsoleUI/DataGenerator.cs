@@ -27,7 +27,7 @@ namespace ConsoleUI
                 .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
                 .RuleFor(u => u.PasswordHash, f => Encoding.ASCII.GetBytes(f.Random.Word()))
                 .RuleFor(u => u.PasswordSalt, f => Encoding.ASCII.GetBytes(f.Random.Word()))
-                .RuleFor(u=>u.Status,f=>f.Random.Bool())
+                .RuleFor(u => u.Status, f => f.Random.Bool());
 
             landListingModel = new Faker<CreateLandListingReq>()
                 .RuleFor(l=>l.IslandNo, f=>f.Random.Int(1000,5000))

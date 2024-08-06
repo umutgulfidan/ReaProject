@@ -74,5 +74,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("getlatestusers")]
+        public IActionResult GetLatestUsers(int pageSize)
+        {
+            var result = _userService.GetLatestUsers(pageSize);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
