@@ -11,5 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IUserImageDal : IEntityRepository<UserImage>
     {
+        string GetProfileImagePath(int userId);
     }
 }

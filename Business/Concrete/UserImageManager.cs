@@ -83,5 +83,10 @@ namespace Business.Concrete
             UpdateStatus(userId);
             return new SuccessResult();
         }
+
+        public IDataResult<string> GetProfileImagePath(int userId)
+        {
+            return new SuccessDataResult<string>(_userImageDal.GetProfileImagePath(userId),Messages.UserImageListed);
+        }
     }
 }

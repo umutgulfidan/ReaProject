@@ -15,7 +15,7 @@ DataGenerator dataGenarator = new DataGenerator();
 var userCount = 0;
 var userListingCount = 0;
 
-var generateUserNumber = 100;
+var generateUserNumber = 1000;
 var userList = dataGenarator.GenerateUsers(generateUserNumber);
 var userIdList = new List<int>();
 foreach (var item in userList)
@@ -28,12 +28,12 @@ foreach (var item in userList)
 
 foreach(var userId in userIdList)
 {
-    var landListings = dataGenarator.GenerateLandListings(5, userId);
+    var landListings = dataGenarator.GenerateLandListings(1, userId);
     foreach(var item in landListings)
     {
         landListingManager.Add(item);
     }
-    var houseListings = dataGenarator.GenerateHouseListings(5, userId);
+    var houseListings = dataGenarator.GenerateHouseListings(1, userId);
     foreach (var item in houseListings)
     {
         houseListingManager.Add(item);

@@ -77,5 +77,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<int>(_userDal.GetAll().Where(u=>u.Status == false).Count());
         }
+
+        public IDataResult<List<UserDetailDto>> GetLatestUsers(int userCount)
+        {
+            return new SuccessDataResult<List<UserDetailDto>>(_userDal.GetLatestUsers(userCount),Messages.UsersListed);
+        }
     }
 }

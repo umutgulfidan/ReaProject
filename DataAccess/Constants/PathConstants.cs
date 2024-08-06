@@ -9,5 +9,6 @@ namespace DataAccess.Constants
     public class PathConstants
     {
            public static string DefaultListingImagePath = "DefaultImage.png";
+        public static string DefaultUserImagePath = "DefaultUserImage.png";
     }
 }
