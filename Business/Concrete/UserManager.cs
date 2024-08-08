@@ -82,5 +82,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<UserDetailDto>>(_userDal.GetLatestUsers(userCount),Messages.UsersListed);
         }
+
+        public IDataResult<bool> GetUserStatus(int userId)
+        {
+            return new SuccessDataResult<bool>(_userDal.Get(u => u.Id == userId).Status);
+        }
     }
 }

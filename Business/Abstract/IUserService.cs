@@ -24,5 +24,6 @@ namespace Business.Abstract
         IDataResult<int> GetPassiveUserCount();
 
         IDataResult<List<UserDetailDto>> GetLatestUsers(int userCount);
+        IDataResult<bool> GetUserStatus(int userId);
     }
 }

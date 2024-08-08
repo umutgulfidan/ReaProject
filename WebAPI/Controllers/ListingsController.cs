@@ -150,5 +150,16 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("getlistingstatus")]
+        public IActionResult GetListingStatus(int listingId)
+        {
+            var result = _listingService.GetListingStatus(listingId);
+            if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }

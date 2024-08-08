@@ -151,7 +151,6 @@ namespace DataAccess.Concrete.EntityFramework
                             join user in context.Users on listing.UserId equals user.Id
 
                             where listing.ListingId == listingId
-                            && listing.Status == true
                             select new LandListingDetailDto
                             {
                                 //LandListing

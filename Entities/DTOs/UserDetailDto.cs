@@ -14,6 +14,7 @@ namespace Entities.DTOs
         public string Email { get; set; }
         public DateTime RegisterDate { get; set; }
         public string ImagePath { get; set; }
+        public bool Status { get; set; }
 
     }
 }

@@ -296,7 +296,7 @@ namespace DataAccess.Concrete.EntityFramework
                             join listingType in context.ListingTypes on listing.ListingTypeId equals listingType.Id
                             join user in context.Users on listing.UserId equals user.Id
 
-                            where listing.ListingId == listingId && listing.Status == true
+                            where listing.ListingId == listingId
                             select new HouseListingDetailDto
                             {
                                 //HouseListing
@@ -335,7 +335,7 @@ namespace DataAccess.Concrete.EntityFramework
                                 //ListingType
                                 ListingTypeName = listingType.ListingTypeName,
                                 //HouseType
-                                HouseTypeName = houseType.Name,
+                                HouseTypeName = houseType.Name
 
                             };
 

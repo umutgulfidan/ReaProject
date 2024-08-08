@@ -26,5 +26,6 @@ namespace Business.Abstract
         IDataResult<int> GetListingCount();
         IDataResult<int> GetActiveListingCount();
         IDataResult<int> GetPassiveListingCount();
+        IDataResult<bool> GetListingStatus(int listingId);
     }
 }

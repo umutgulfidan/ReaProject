@@ -21,7 +21,7 @@ namespace Entities.Concrete
         public decimal Price { get; set; }
         public DateTime? Date { get; set; }
         public int SquareMeter { get; set; }
-        public bool? Status { get; set; } = true;
+        public bool Status { get; set; } = true;
 
     }
 }
