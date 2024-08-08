@@ -37,6 +37,10 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<User>(Messages.UserNotFound);
             }
+            if(userToCheck.Data.Status== false)
+            {
+                return new ErrorDataResult<User>(Messages.PassiveAccount);
+            }
             if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
                 return new ErrorDataResult<User>(Messages.PasswordError);

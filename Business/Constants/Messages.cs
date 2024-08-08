@@ -36,6 +36,7 @@ namespace Business.Constants
         public static string UserAlreadyExists = "Bu kullanıcı zaten mevcut";
         public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+        public static string PassiveAccount = "Giriş yapmaya çalıştığınız hesap pasif durumda.Yasaklanmış ya da silinmiş olabilir.";
 
         //City
 
