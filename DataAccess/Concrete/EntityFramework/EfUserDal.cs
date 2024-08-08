@@ -31,23 +31,24 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context = new ReaContext())
             {
                 var result = (from user in context.Users
-                                   join userImages in (
-                                       from ui in context.UserImages
-                                       where ui.Status == true
-                                       orderby ui.Date descending
-                                       select ui
-                                   ) on user.Id equals userImages.UserId into userImageGroup
-                                   from userImage in userImageGroup.DefaultIfEmpty()
-                                   where user.Id == id
-                                   select new UserDetailDto
-                                   {
-                                       Id = user.Id,
-                                       FirstName = user.FirstName,
-                                       LastName = user.LastName,
-                                       Email = user.Email,
-                                       RegisterDate = user.RegisterDate,
-                                       ImagePath = userImage != null ? userImage.ImagePath : string.Empty
-                                   }).First();
+                              join userImages in (
+                                  from ui in context.UserImages
+                                  where ui.Status == true
+                                  orderby ui.Date descending
+                                  select ui
+                              ) on user.Id equals userImages.UserId into userImageGroup
+                              from userImage in userImageGroup.DefaultIfEmpty()
+                              where user.Id == id
+                              select new UserDetailDto
+                              {
+                                  Id = user.Id,
+                                  FirstName = user.FirstName,
+                                  LastName = user.LastName,
+                                  Email = user.Email,
+                                  RegisterDate = user.RegisterDate,
+                                  ImagePath = userImage != null ? userImage.ImagePath : string.Empty,
+                                  Status = user.Status
+                              }).First();
 
 
                 return result;
@@ -74,7 +75,8 @@ namespace DataAccess.Concrete.EntityFramework
                                   LastName = user.LastName,
                                   Email = user.Email,
                                   RegisterDate = user.RegisterDate,
-                                  ImagePath = userImage != null ? userImage.ImagePath : Constants.PathConstants.DefaultUserImagePath
+                                  ImagePath = userImage != null ? userImage.ImagePath : Constants.PathConstants.DefaultUserImagePath,
+                                  Status = user.Status
                               }).Take(userCount).ToList();
 
                 return result;

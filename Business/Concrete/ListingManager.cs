@@ -131,5 +131,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<int>(_listingDal.GetAll().Where(l=>l.Status==false).Count());
         }
+
+        public IDataResult<bool> GetListingStatus(int listingId)
+        {
+            return new SuccessDataResult<bool>(_listingDal.Get(l=> l.ListingId==listingId).Status);
+        }
     }
 }
