@@ -14,5 +14,7 @@ namespace DataAccess.Abstract
         List<OperationClaim> GetClaims(User user);
         UserDetailDto GetUserDetail(int id);
         List<UserDetailDto> GetLatestUsers(int userCount);
+
+        List<UserDetailDto> GetPaginatedUsers(UserFilterObject? filterObject, SortingObject? sortingObject, int pageNumber, int pageSize);
     }
 }

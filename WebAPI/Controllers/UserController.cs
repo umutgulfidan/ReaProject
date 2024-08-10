@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Extensions.Claims;
 using Core.Utilities.Results;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -91,6 +92,17 @@ namespace WebAPI.Controllers
         {
             var result = _userService.GetUserStatus(userId);
             if(result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("getpaginatedusers")]
+        public IActionResult GetPaginatedListings([FromBody] UserRequestModel requestModel)
+        {
+            var result = _userService.GetPaginatedUsers(requestModel.Filter, requestModel.Sorting, requestModel.PageNumber, requestModel.PageSize);
+            if (result.IsSuccess)
             {
                 return Ok(result);
             }

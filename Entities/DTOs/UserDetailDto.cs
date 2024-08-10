@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Entities.DTOs
         public DateTime RegisterDate { get; set; }
         public string ImagePath { get; set; }
         public bool Status { get; set; }
+        public List<OperationClaim> OperationClaims { get; set; }
 
     }
 }
