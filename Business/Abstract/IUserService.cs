@@ -25,5 +25,7 @@ namespace Business.Abstract
 
         IDataResult<List<UserDetailDto>> GetLatestUsers(int userCount);
         IDataResult<bool> GetUserStatus(int userId);
+
+        IDataResult<List<UserDetailDto>> GetPaginatedUsers(UserFilterObject? filterObject,SortingObject? sortingObject,int pageNumber,int pageSize);
     }
 }

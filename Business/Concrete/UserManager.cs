@@ -87,5 +87,10 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<bool>(_userDal.Get(u => u.Id == userId).Status);
         }
+
+        public IDataResult<List<UserDetailDto>> GetPaginatedUsers(UserFilterObject? filterObject, SortingObject? sortingObject, int pageNumber, int pageSize)
+        {
+            return new SuccessDataResult<List<UserDetailDto>>(_userDal.GetPaginatedUsers(filterObject,sortingObject,pageNumber,pageSize), Messages.UsersListed);
+        }
     }
 }
