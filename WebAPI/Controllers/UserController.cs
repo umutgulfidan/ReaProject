@@ -80,7 +80,7 @@ namespace WebAPI.Controllers
         public IActionResult GetLatestUsers(int pageSize)
         {
             var result = _userService.GetLatestUsers(pageSize);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 return Ok(result);
             }
@@ -91,7 +91,7 @@ namespace WebAPI.Controllers
         public IActionResult GetUserStatus(int userId)
         {
             var result = _userService.GetUserStatus(userId);
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 return Ok(result);
             }
@@ -102,6 +102,28 @@ namespace WebAPI.Controllers
         public IActionResult GetPaginatedListings([FromBody] UserRequestModel requestModel)
         {
             var result = _userService.GetPaginatedUsers(requestModel.Filter, requestModel.Sorting, requestModel.PageNumber, requestModel.PageSize);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("setuseractive")]
+        public IActionResult SetUserActive(int userId)
+        {
+            var result = _userService.SetUserActive(userId);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("setuserinactive")]
+        public IActionResult SetUserInactive(int userId)
+        {
+            var result = _userService.SetUserInactive(userId);
             if (result.IsSuccess)
             {
                 return Ok(result);

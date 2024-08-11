@@ -23,6 +23,8 @@ namespace Business.Constants
         public static string UserDeleted = "Kullanıcı başarıyla silindi.";
         public static string UserUpdated = "Kullanıcı başarıyla güncellendi.";
         public static string UsersListed = "Kullanıcılar başarıyla listelendi.";
+        public static string UserAlreadyActive = "Kullanıcı hesabı zaten aktif.";
+        public static string UserAlreadyInactive = "Kullanıcı hesabı zaten pasif.";
         public static string PasswordRequirements = "Şifre en az bir harf, bir sayı ve bir özel karakter içermelidir.";
         public static string FirstNameMustContainOnlyLetter = "Ad sadece karakterlerden oluşmalıdır";
         public static string LastNameMustContainOnlyLetter = "Soyad sadece karakterlerden oluşmalıdır";

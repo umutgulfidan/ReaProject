@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -91,6 +92,48 @@ namespace Business.Concrete
         public IDataResult<List<UserDetailDto>> GetPaginatedUsers(UserFilterObject? filterObject, SortingObject? sortingObject, int pageNumber, int pageSize)
         {
             return new SuccessDataResult<List<UserDetailDto>>(_userDal.GetPaginatedUsers(filterObject,sortingObject,pageNumber,pageSize), Messages.UsersListed);
+        }
+
+        [SecuredOperation("admin", false)]
+        public IResult SetUserActive(int userId)
+        {
+            var user = _userDal.Get(u => u.Id == userId);
+            if (user != null)
+            {
+                if(user.Status == false)
+                {
+                    user.Status = true;
+                    _userDal.Update(user);
+                    return new SuccessResult(Messages.UserUpdated);
+                }
+                else
+                {
+                    return new ErrorResult(Messages.UserAlreadyActive);
+                }
+
+            }
+            return new ErrorResult(Messages.UserNotFound);
+        }
+
+        [SecuredOperation("admin",false)]
+        public IResult SetUserInactive(int userId)
+        {
+            var user = _userDal.Get(u => u.Id == userId);
+            if (user != null)
+            {
+                if (user.Status == true)
+                {
+                    user.Status = false;
+                    _userDal.Update(user);
+                    return new SuccessResult(Messages.UserUpdated);
+                }
+                else
+                {
+                    return new ErrorResult(Messages.UserAlreadyInactive);
+                }
+
+            }
+            return new ErrorResult(Messages.UserNotFound);
         }
     }
 }
