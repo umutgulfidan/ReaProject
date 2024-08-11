@@ -27,5 +27,8 @@ namespace Business.Abstract
         IDataResult<bool> GetUserStatus(int userId);
 
         IDataResult<List<UserDetailDto>> GetPaginatedUsers(UserFilterObject? filterObject,SortingObject? sortingObject,int pageNumber,int pageSize);
+
+        IResult SetUserActive(int userId);
+        IResult SetUserInactive(int userId);
     }
 }
