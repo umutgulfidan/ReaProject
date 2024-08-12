@@ -27,5 +27,6 @@ namespace Entities.DTOs
         public int SquareMeter { get; set; }
         public string ImagePath { get; set; }
         public bool? Status { get; set; }
+        public bool? UserStatus { get; set;}
     }
 }

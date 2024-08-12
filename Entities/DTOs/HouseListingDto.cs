@@ -34,6 +34,7 @@ namespace Entities.DTOs
         public bool? HasBalcony { get; set; }
         public bool? IsInGatedCommunity { get; set; }
         public bool? Status { get; set; }
+        public bool? UserStatus { get; set; }
 
 
     }

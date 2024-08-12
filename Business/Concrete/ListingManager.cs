@@ -124,12 +124,12 @@ namespace Business.Concrete
 
         public IDataResult<int> GetActiveListingCount()
         {
-            return new SuccessDataResult<int>(_listingDal.GetAll().Where(l=> l.Status==true).Count());
+            return new SuccessDataResult<int>(_listingDal.GetActiveListingCount());
         }
 
         public IDataResult<int> GetPassiveListingCount()
         {
-            return new SuccessDataResult<int>(_listingDal.GetAll().Where(l=>l.Status==false).Count());
+            return new SuccessDataResult<int>(_listingDal.GetPassiveListingCount());
         }
 
         public IDataResult<bool> GetListingStatus(int listingId)
