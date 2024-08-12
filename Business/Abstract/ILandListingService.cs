@@ -22,5 +22,8 @@ namespace Business.Abstract
         IDataResult<List<LandListing>> GetAll();
         IDataResult<LandListing> GetById(int id);
         IDataResult<List<LandListingDto>> GetPaginatedListingsWithFilterAndSorting(LandListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
+
+        IDataResult<int> GetActiveLandListingCount();
+        IDataResult<int> GetPassiveLandListingCount();
     }
 }

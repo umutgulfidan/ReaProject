@@ -19,7 +19,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public List<ListingDetailsView> GetView()
         {
-            using(ReaContext context = new ReaContext())
+            using (ReaContext context = new ReaContext())
             {
                 var result = context.ListingDetailsView.ToList();
                 return result;
@@ -32,7 +32,12 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 var defaultImagePath = PathConstants.DefaultListingImagePath;
 
-                var query = context.Listings.Where(l => l.Status == true);
+                var query = context.Listings
+                 .Where(l => l.Status == true)
+                 .Join(context.Users, listing => listing.UserId, user => user.Id, (listing, user) => new { listing, user })
+                 .Where(joined => joined.user.Status == true)
+                 .Select(joined => joined.listing);
+    
 
                 if (filter != null)
                 {
@@ -146,7 +151,7 @@ namespace DataAccess.Concrete.EntityFramework
 
 
         }
-        public List<ListingDto> GetListingDetails()
+        public List<ListingDto> GetListingDetails() 
         {
             using (var context = new ReaContext())
             {
@@ -189,8 +194,6 @@ namespace DataAccess.Concrete.EntityFramework
                          ImagePath = image != null ? image.ImagePath : defaultImagePath,
                          Status = listingWithImages.listingInfo.listing.Status
                      });
-
-                query = query.Where(dto => dto.Status == true);
 
 
                 var result = query
@@ -291,7 +294,12 @@ namespace DataAccess.Concrete.EntityFramework
                 var defaultImagePath = PathConstants.DefaultListingImagePath;
                 var skipAmount = (pageNumber - 1) * pageSize;
 
-                var query = context.Listings.Where(l => l.Status == true);
+                
+        var query = context.Listings
+            .Where(l => l.Status == true)
+            .Join(context.Users, listing => listing.UserId, user => user.Id, (listing, user) => new { listing, user })
+            .Where(joined => joined.user.Status == true)
+            .Select(joined => joined.listing);
 
                 if (filter != null)
                 {
@@ -349,9 +357,9 @@ namespace DataAccess.Concrete.EntityFramework
                                 query.OrderByDescending(l => l.Price);
                             break;
                         case "squaremeter":
-                                query = sorting.SortDirection == SortDirection.Ascending ?
-                                query.OrderBy(l => l.SquareMeter) :
-                                query.OrderByDescending(l => l.SquareMeter);
+                            query = sorting.SortDirection == SortDirection.Ascending ?
+                            query.OrderBy(l => l.SquareMeter) :
+                            query.OrderByDescending(l => l.SquareMeter);
                             break;
                         // Diğer sıralama seçenekleri buraya eklenebilir
                         default:
@@ -410,5 +418,30 @@ namespace DataAccess.Concrete.EntityFramework
             }
         }
 
+        public int GetActiveListingCount()
+        {
+            using (ReaContext context = new ReaContext())
+            {
+                var query = from listing in context.Listings
+                            join user in context.Users on listing.UserId equals user.Id
+                            where (listing.Status == true && user.Status == true)
+                            select listing;
+
+                return query.Count();
+            }
+        }
+
+        public int GetPassiveListingCount()
+        {
+            using (ReaContext context = new ReaContext())
+            {
+                var query = from listing in context.Listings
+                            join user in context.Users on listing.UserId equals user.Id
+                            where !(listing.Status == true && user.Status == true)
+                            select listing;
+
+                return query.Count();
+            }
+        }
     }
 }

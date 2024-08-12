@@ -194,5 +194,15 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<HouseListingDto>>(_houseListingDal.GetPaginatedListingsWithFilterAndSorting(filter,sorting,pageNumber,pageSize));
         }
+
+        public IDataResult<int> GetActiveHouseListingCount()
+        {
+            return new SuccessDataResult<int>(_houseListingDal.GetActiveHouseListingCount());
+        }
+
+        public IDataResult<int> GetPassiveHouseListingCount()
+        {
+            return new SuccessDataResult<int>(_houseListingDal.GetPassiveHouseListingCount());
+        }
     }
 }

@@ -104,5 +104,26 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("getactivehouselistingcount")]
+        public IActionResult GetActiveListingCount()
+        {
+            var result = _houseListingService.GetActiveHouseListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getpassivehouselistingcount")]
+        public IActionResult GetPassiveListingCount()
+        {
+            var result = _houseListingService.GetPassiveHouseListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

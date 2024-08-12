@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.DTOs;
 using System;
@@ -15,5 +16,8 @@ namespace DataAccess.Abstract
         List<HouseListingDto> GetHouseListingsByFilter(HouseFilterObject filter);
         HouseListingDetailDto GetHouseListingDetails(int listingId);
         List<HouseListingDto> GetPaginatedListingsWithFilterAndSorting(HouseFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
+
+        int GetActiveHouseListingCount();
+        int GetPassiveHouseListingCount();
     }
 }

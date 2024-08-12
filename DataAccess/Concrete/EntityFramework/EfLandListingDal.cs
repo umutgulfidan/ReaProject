@@ -14,35 +14,39 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfLandListingDal : EfRepositoryBase<ReaContext, LandListing>, ILandListingDal
     {
+
         public List<LandListingDto> GetAllByFilter(LandListingFilterObject filter)
         {
             using (ReaContext context = new ReaContext())
             {
                 var defaultImagePath = PathConstants.DefaultListingImagePath;
-
                 var query = context.LandListings
-                    .Join(context.Listings,
-                          landListing => landListing.ListingId,
-                          listing => listing.ListingId,
-                          (landListing, listing) => new { landListing, listing })
-                    .Join(context.Cities,
-                          houseListingListing => houseListingListing.listing.CityId,
-                          city => city.Id,
-                          (houseListingListing, city) => new { houseListingListing.landListing, houseListingListing.listing, city })
-                    .Join(context.Districts,
-                          houseListingCity => houseListingCity.listing.DistrictId,
-                          district => district.Id,
-                          (houseListingCity, district) => new { houseListingCity.landListing, houseListingCity.listing, houseListingCity.city, district })
-                    .Join(context.ListingTypes,
-                          houseListingType => houseListingType.listing.ListingTypeId,
-                          listingType => listingType.Id,
-                          (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
-                    .GroupJoin(context.ListingImages,
-                               landListingTypeInfo => landListingTypeInfo.listing.ListingId,
-                               image => image.ListingId,
-                               (landListingTypeInfo, images) => new { landListingTypeInfo, images });
+                            .Join(context.Listings,
+                                  landListing => landListing.ListingId,
+                                  listing => listing.ListingId,
+                                  (landListing, listing) => new { landListing, listing })
+                            .Join(context.Users,
+                                  landListingListing => landListingListing.listing.UserId,
+                                  user => user.Id,
+                                  (landListingListing, user) => new { landListingListing.landListing, landListingListing.listing, user })
+                            .Join(context.Cities,
+                                  landListingUser => landListingUser.listing.CityId,
+                                  city => city.Id,
+                                  (landListingUser, city) => new { landListingUser.landListing, landListingUser.listing, landListingUser.user, city })
+                            .Join(context.Districts,
+                                  landListingCity => landListingCity.listing.DistrictId,
+                                  district => district.Id,
+                                  (landListingCity, district) => new { landListingCity.landListing, landListingCity.listing, landListingCity.user, landListingCity.city, district })
+                            .Join(context.ListingTypes,
+                                  landListingDistrict => landListingDistrict.listing.ListingTypeId,
+                                  listingType => listingType.Id,
+                                  (landListingDistrict, listingType) => new { landListingDistrict.landListing, landListingDistrict.listing, landListingDistrict.user, landListingDistrict.city, landListingDistrict.district, listingType })
+                            .GroupJoin(context.ListingImages,
+                                       landListingTypeInfo => landListingTypeInfo.listing.ListingId,
+                                       image => image.ListingId,
+                                       (landListingTypeInfo, images) => new { landListingTypeInfo, images });
 
-                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true);
+                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true && dto.landListingTypeInfo.user.Status == true);
 
 
                 if (filter != null)
@@ -211,33 +215,38 @@ namespace DataAccess.Concrete.EntityFramework
                           houseListingType => houseListingType.listing.ListingTypeId,
                           listingType => listingType.Id,
                           (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
+                    .Join(context.Users, // Assuming there's a Users table
+                          houseListingType => houseListingType.listing.UserId,
+                          user => user.Id,
+                          (houseListingType, user) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, houseListingType.listingType, user })
                     .GroupJoin(context.ListingImages,
-                               landListingTypeInfo => landListingTypeInfo.listing.ListingId,
+                               houseListingWithImages => houseListingWithImages.listing.ListingId,
                                image => image.ListingId,
-                               (landListingTypeInfo, images) => new { landListingTypeInfo, images })
-                    .SelectMany(landListingWithImages => landListingWithImages.images.DefaultIfEmpty(),
-                        (landListingWithImages, image) => new LandListingDto
+                               (houseListingWithImages, images) => new { houseListingWithImages, images })
+                    .SelectMany(houseListingWithImages => houseListingWithImages.images.DefaultIfEmpty(),
+                        (houseListingWithImages, image) => new LandListingDto
                         {
-                            Id = landListingWithImages.landListingTypeInfo.landListing.Id,
-                            ListingId = landListingWithImages.landListingTypeInfo.listing.ListingId,
-                            SquareMeter = landListingWithImages.landListingTypeInfo.listing.SquareMeter,
-                            CityName = landListingWithImages.landListingTypeInfo.city.CityName,
-                            DistrictName = landListingWithImages.landListingTypeInfo.district.DistrictName,
-                            Title = landListingWithImages.landListingTypeInfo.listing.Title,
-                            Description = landListingWithImages.landListingTypeInfo.listing.Description,
-                            Price = landListingWithImages.landListingTypeInfo.listing.Price,
-                            ListingTypeName = landListingWithImages.landListingTypeInfo.listingType.ListingTypeName,
+                            Id = houseListingWithImages.houseListingWithImages.landListing.Id,
+                            ListingId = houseListingWithImages.houseListingWithImages.listing.ListingId,
+                            SquareMeter = houseListingWithImages.houseListingWithImages.listing.SquareMeter,
+                            CityName = houseListingWithImages.houseListingWithImages.city.CityName,
+                            DistrictName = houseListingWithImages.houseListingWithImages.district.DistrictName,
+                            Title = houseListingWithImages.houseListingWithImages.listing.Title,
+                            Description = houseListingWithImages.houseListingWithImages.listing.Description,
+                            Price = houseListingWithImages.houseListingWithImages.listing.Price,
+                            ListingTypeName = houseListingWithImages.houseListingWithImages.listingType.ListingTypeName,
                             ImagePath = image != null ? image.ImagePath : defaultImagePath,
-                            Date = landListingWithImages.landListingTypeInfo.listing.Date,
-                            ParcelNo = landListingWithImages.landListingTypeInfo.landListing.ParcelNo,
-                            IslandNo = landListingWithImages.landListingTypeInfo.landListing.IslandNo,
-                            SheetNo = landListingWithImages.landListingTypeInfo.landListing.SheetNo,
-                            FloorEquivalent = landListingWithImages.landListingTypeInfo.landListing.FloorEquivalent,
-                            Address = landListingWithImages.landListingTypeInfo.listing.Address,
-                            Status = landListingWithImages.landListingTypeInfo.listing.Status,
+                            Date = houseListingWithImages.houseListingWithImages.listing.Date,
+                            ParcelNo = houseListingWithImages.houseListingWithImages.landListing.ParcelNo,
+                            IslandNo = houseListingWithImages.houseListingWithImages.landListing.IslandNo,
+                            SheetNo = houseListingWithImages.houseListingWithImages.landListing.SheetNo,
+                            FloorEquivalent = houseListingWithImages.houseListingWithImages.landListing.FloorEquivalent,
+                            Address = houseListingWithImages.houseListingWithImages.listing.Address,
+                            Status = houseListingWithImages.houseListingWithImages.listing.Status,
+                            UserStatus = houseListingWithImages.houseListingWithImages.user.Status,
                         });
 
-                query = query.Where(dto => dto.Status == true);
+                query = query.Where(dto => dto.Status == true && dto.UserStatus == true);
 
                 var result = query
                 .AsEnumerable()
@@ -296,13 +305,17 @@ namespace DataAccess.Concrete.EntityFramework
                           houseListingType => houseListingType.listing.ListingTypeId,
                           listingType => listingType.Id,
                           (houseListingType, listingType) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, listingType })
+                    .Join(context.Users, // Join user table
+                          houseListingType => houseListingType.listing.UserId,
+                          user => user.Id,
+                          (houseListingType, user) => new { houseListingType.landListing, houseListingType.listing, houseListingType.city, houseListingType.district, houseListingType.listingType, user })
                     .GroupJoin(context.ListingImages,
                                landListingTypeInfo => landListingTypeInfo.listing.ListingId,
                                image => image.ListingId,
                                (landListingTypeInfo, images) => new { landListingTypeInfo, images });
 
-                //Filtreleme
-                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true);
+                // Filtreleme
+                query = query.Where(dto => dto.landListingTypeInfo.listing.Status == true && dto.landListingTypeInfo.user.Status == true);
 
 
                 if (filter != null)
@@ -407,6 +420,34 @@ namespace DataAccess.Concrete.EntityFramework
                 })
                 .ToList();
                 return result;
+            }
+        }
+
+        public int GetPassiveLandListingCount()
+        {
+            using (ReaContext context = new ReaContext())
+            {
+                var query = from landListing in context.LandListings
+                            join listing in context.Listings on landListing.ListingId equals listing.ListingId
+                            join user in context.Users on listing.UserId equals user.Id
+                            where !(user.Status == true && listing.Status == true)
+                            select landListing;
+
+                return query.Count();
+            }
+        }
+
+        public int GetActiveLandListingCount()
+        {
+            using (ReaContext context = new ReaContext())
+            {
+                var query = from landListing in context.LandListings
+                            join listing in context.Listings on landListing.ListingId equals listing.ListingId
+                            join user in context.Users on listing.UserId equals user.Id
+                            where (user.Status == true && listing.Status == true)
+                            select landListing;
+
+                return query.Count();
             }
         }
     }

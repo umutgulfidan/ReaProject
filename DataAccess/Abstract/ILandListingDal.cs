@@ -15,5 +15,8 @@ namespace DataAccess.Abstract
         LandListingDetailDto GetLandListingDetail(int listingId);
         List<LandListingDto> GetAllByFilter(LandListingFilterObject filter);
         List<LandListingDto> GetPaginatedListingsWithFilterAndSorting(LandListingFilterObject filter, SortingObject sorting, int pageNumber, int pageSize);
+
+        int GetActiveLandListingCount();
+        int GetPassiveLandListingCount();
     }
 }

@@ -24,33 +24,37 @@ namespace DataAccess.Concrete.EntityFramework
                           houseListing => houseListing.ListingId,
                           listing => listing.ListingId,
                           (houseListing, listing) => new { houseListing, listing })
+                    .Join(context.Users, // Kullanıcı tablosu ile birleştirme
+                          houseListingListing => houseListingListing.listing.UserId,
+                          user => user.Id,
+                          (houseListingListing, user) => new { houseListingListing.houseListing, houseListingListing.listing, user })
                     .Join(context.Cities,
-                          houseListingListing => houseListingListing.listing.CityId,
+                          houseListingUser => houseListingUser.listing.CityId,
                           city => city.Id,
-                          (houseListingListing, city) => new { houseListingListing.houseListing, houseListingListing.listing, city })
+                          (houseListingUser, city) => new { houseListingUser.houseListing, houseListingUser.listing, houseListingUser.user, city })
                     .Join(context.Districts,
                           houseListingCity => houseListingCity.listing.DistrictId,
                           district => district.Id,
-                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.city, district })
+                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.user, houseListingCity.city, district })
                     .Join(context.HouseTypes,
                           houseListingDistrict => houseListingDistrict.houseListing.TypeId,
                           houseType => houseType.Id,
-                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.city, houseListingDistrict.district, houseType })
+                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.user, houseListingDistrict.city, houseListingDistrict.district, houseType })
                     .Join(context.ListingTypes,
                           houseListingType => houseListingType.listing.ListingTypeId,
                           listingType => listingType.Id,
-                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
+                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.user, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
                     .GroupJoin(context.ListingImages,
                                houseListingTypeInfo => houseListingTypeInfo.listing.ListingId,
                                image => image.ListingId,
                                (houseListingTypeInfo, images) => new { houseListingTypeInfo, images });
 
-                query = query.Where(dto => dto.houseListingTypeInfo.listing.Status == true);
+                // Sadece aktif listing ve kullanıcıları dahil et
+                query = query.Where(dto => dto.houseListingTypeInfo.listing.Status == true && dto.houseListingTypeInfo.user.Status == true);
 
                 // Filtre uygulamaları
                 if (filter != null)
                 {
-
                     if (filter.RoomCount.HasValue)
                     {
                         query = query.Where(dto => dto.houseListingTypeInfo.houseListing.RoomCount == filter.RoomCount.Value);
@@ -125,96 +129,98 @@ namespace DataAccess.Concrete.EntityFramework
                     {
                         query = query.Where(dto => dto.houseListingTypeInfo.houseListing.IsInGatedCommunity == filter.IsInGatedCommunity.Value);
                     }
+
                     if (filter.MinSquareMeter.HasValue)
                     {
                         query = query.Where(dto => dto.houseListingTypeInfo.listing.SquareMeter >= filter.MinSquareMeter.Value);
                     }
+
                     if (filter.MaxSquareMeter.HasValue)
                     {
                         query = query.Where(dto => dto.houseListingTypeInfo.listing.SquareMeter <= filter.MaxSquareMeter.Value);
                     }
+
                     if (filter.ListingTypeId.HasValue)
                     {
                         query = query.Where(dto => dto.houseListingTypeInfo.listing.ListingTypeId == filter.ListingTypeId);
                     }
-                    if (!filter.SearchText.IsNullOrEmpty())
+
+                    if (!string.IsNullOrEmpty(filter.SearchText))
                     {
                         var searchText = filter.SearchText.ToLower();
-                        query = query.Where(dto => dto.houseListingTypeInfo.listing.ListingId.ToString() == searchText || dto.houseListingTypeInfo.listing.Title.Contains(searchText));
+                        query = query.Where(dto => dto.houseListingTypeInfo.listing.ListingId.ToString() == searchText || dto.houseListingTypeInfo.listing.Title.ToLower().Contains(searchText));
                     }
-
                 }
-
-
-
-
 
                 // ListingId'ye göre gruplama ve ilk kaydı seçme işlemi
                 var result = query
-                .AsEnumerable()
-                 .GroupBy(dto => dto.houseListingTypeInfo.listing.ListingId)
-              .Select(group => new HouseListingDto
-              {
-                  Id = group.First().houseListingTypeInfo.houseListing.HouseListingId,
-                  BuildingAge = group.First().houseListingTypeInfo.houseListing.BuildingAge,
-                  HasBalcony = group.First().houseListingTypeInfo.houseListing.HasBalcony,
-                  HasElevator = group.First().houseListingTypeInfo.houseListing.HasElevator,
-                  HasFurniture = group.First().houseListingTypeInfo.houseListing.HasFurniture,
-                  HasGarden = group.First().houseListingTypeInfo.houseListing.HasGarden,
-                  HasParking = group.First().houseListingTypeInfo.houseListing.HasParking,
-                  IsInGatedCommunity = group.First().houseListingTypeInfo.houseListing.IsInGatedCommunity,
-                  ListingId = group.First().houseListingTypeInfo.houseListing.ListingId,
-                  Title = group.First().houseListingTypeInfo.listing.Title,
-                  Description = group.First().houseListingTypeInfo.listing.Description,
-                  CityName = group.First().houseListingTypeInfo.city.CityName,
-                  DistrictName = group.First().houseListingTypeInfo.district.DistrictName,
-                  ListingTypeName = group.First().houseListingTypeInfo.listingType.ListingTypeName,
-                  Price = group.First().houseListingTypeInfo.listing.Price,
-                  Date = group.First().houseListingTypeInfo.listing.Date,
-                  BathroomCount = group.First().houseListingTypeInfo.houseListing.BathroomCount,
-                  LivingRoomCount = group.First().houseListingTypeInfo.houseListing.LivingRoomCount,
-                  RoomCount = group.First().houseListingTypeInfo.houseListing.RoomCount,
-                  HouseTypeName = group.First().houseListingTypeInfo.houseType.Name,
-                  SquareMeter = group.First().houseListingTypeInfo.listing.SquareMeter,
+                    .AsEnumerable()
+                    .GroupBy(dto => dto.houseListingTypeInfo.listing.ListingId)
+                    .Select(group => new HouseListingDto
+                    {
+                        Id = group.First().houseListingTypeInfo.houseListing.HouseListingId,
+                        BuildingAge = group.First().houseListingTypeInfo.houseListing.BuildingAge,
+                        HasBalcony = group.First().houseListingTypeInfo.houseListing.HasBalcony,
+                        HasElevator = group.First().houseListingTypeInfo.houseListing.HasElevator,
+                        HasFurniture = group.First().houseListingTypeInfo.houseListing.HasFurniture,
+                        HasGarden = group.First().houseListingTypeInfo.houseListing.HasGarden,
+                        HasParking = group.First().houseListingTypeInfo.houseListing.HasParking,
+                        IsInGatedCommunity = group.First().houseListingTypeInfo.houseListing.IsInGatedCommunity,
+                        ListingId = group.First().houseListingTypeInfo.houseListing.ListingId,
+                        Title = group.First().houseListingTypeInfo.listing.Title,
+                        Description = group.First().houseListingTypeInfo.listing.Description,
+                        CityName = group.First().houseListingTypeInfo.city.CityName,
+                        DistrictName = group.First().houseListingTypeInfo.district.DistrictName,
+                        ListingTypeName = group.First().houseListingTypeInfo.listingType.ListingTypeName,
+                        Price = group.First().houseListingTypeInfo.listing.Price,
+                        Date = group.First().houseListingTypeInfo.listing.Date,
+                        BathroomCount = group.First().houseListingTypeInfo.houseListing.BathroomCount,
+                        LivingRoomCount = group.First().houseListingTypeInfo.houseListing.LivingRoomCount,
+                        RoomCount = group.First().houseListingTypeInfo.houseListing.RoomCount,
+                        HouseTypeName = group.First().houseListingTypeInfo.houseType.Name,
+                        SquareMeter = group.First().houseListingTypeInfo.listing.SquareMeter,
 
-                  // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
-                  ImagePath = group.SelectMany(dto => dto.images).Select(img => img.ImagePath).FirstOrDefault() ?? PathConstants.DefaultListingImagePath
-              })
-                 .OrderByDescending(dto => dto.Date)
-                 .ToList();
-
+                        // ImagePath'i bulmak için grup içerisindeki ilk geçerli (null olmayan) değeri seçin
+                        ImagePath = group.SelectMany(dto => dto.images).Select(img => img.ImagePath).FirstOrDefault() ?? PathConstants.DefaultListingImagePath
+                    })
+                    .OrderByDescending(dto => dto.Date)
+                    .ToList();
 
                 return result;
             }
         }
+
         public List<HouseListingDto> GetHouseListings()
         {
             using (var context = new ReaContext())
             {
                 var defaultImagePath = PathConstants.DefaultListingImagePath;
 
-
                 var query = context.HouseListings
                     .Join(context.Listings,
                           houseListing => houseListing.ListingId,
                           listing => listing.ListingId,
                           (houseListing, listing) => new { houseListing, listing })
+                    .Join(context.Users, // Kullanıcı tablosu ile birleştirme
+                          houseListingListing => houseListingListing.listing.UserId,
+                          user => user.Id,
+                          (houseListingListing, user) => new { houseListingListing.houseListing, houseListingListing.listing, user })
                     .Join(context.Cities,
-                          houseListingListing => houseListingListing.listing.CityId,
+                          houseListingUser => houseListingUser.listing.CityId,
                           city => city.Id,
-                          (houseListingListing, city) => new { houseListingListing.houseListing, houseListingListing.listing, city })
+                          (houseListingUser, city) => new { houseListingUser.houseListing, houseListingUser.listing, houseListingUser.user, city })
                     .Join(context.Districts,
                           houseListingCity => houseListingCity.listing.DistrictId,
                           district => district.Id,
-                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.city, district })
+                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.user, houseListingCity.city, district })
                     .Join(context.HouseTypes,
                           houseListingDistrict => houseListingDistrict.houseListing.TypeId,
                           houseType => houseType.Id,
-                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.city, houseListingDistrict.district, houseType })
+                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.user, houseListingDistrict.city, houseListingDistrict.district, houseType })
                     .Join(context.ListingTypes,
                           houseListingType => houseListingType.listing.ListingTypeId,
                           listingType => listingType.Id,
-                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
+                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.user, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
                     .GroupJoin(context.ListingImages,
                                houseListingTypeInfo => houseListingTypeInfo.listing.ListingId,
                                image => image.ListingId,
@@ -236,13 +242,12 @@ namespace DataAccess.Concrete.EntityFramework
                             RoomCount = houseListingWithImages.houseListingTypeInfo.houseListing.RoomCount,
                             ImagePath = image != null ? image.ImagePath : defaultImagePath,
                             Date = houseListingWithImages.houseListingTypeInfo.listing.Date,
-                            Status = houseListingWithImages.houseListingTypeInfo.listing.Status
-
-
+                            Status = houseListingWithImages.houseListingTypeInfo.listing.Status,
+                            UserStatus = houseListingWithImages.houseListingTypeInfo.user.Status // Kullanıcı durumunu ekliyoruz
                         });
 
-                query = query.Where(dto => dto.Status == true);
-
+                // Sadece aktif listing ve kullanıcıları dahil et
+                query = query.Where(dto => dto.Status == true && dto.UserStatus == true);
 
                 // ListingId'ye göre gruplama ve ilk kaydı seçme işlemi
                 var result = query
@@ -270,17 +275,15 @@ namespace DataAccess.Concrete.EntityFramework
                         HasParking = group.First().HasParking,
                         IsInGatedCommunity = group.First().IsInGatedCommunity,
                         SquareMeter = group.First().SquareMeter,
-
-
                         ImagePath = group.Select(dto => dto.ImagePath).FirstOrDefault(image => image != null) ?? PathConstants.DefaultListingImagePath
                     })
                     .OrderByDescending(dto => dto.Date)
                     .ToList();
 
-
                 return result;
             }
         }
+
 
 
         public HouseListingDetailDto GetHouseListingDetails(int listingId)
@@ -357,30 +360,33 @@ namespace DataAccess.Concrete.EntityFramework
                           houseListing => houseListing.ListingId,
                           listing => listing.ListingId,
                           (houseListing, listing) => new { houseListing, listing })
+                    .Join(context.Users, // Kullanıcıyla birleştirme
+                          houseListingListing => houseListingListing.listing.UserId,
+                          user => user.Id,
+                          (houseListingListing, user) => new { houseListingListing.houseListing, houseListingListing.listing, user })
                     .Join(context.Cities,
-                          houseListingListing => houseListingListing.listing.CityId,
+                          houseListingUser => houseListingUser.listing.CityId,
                           city => city.Id,
-                          (houseListingListing, city) => new { houseListingListing.houseListing, houseListingListing.listing, city })
+                          (houseListingUser, city) => new { houseListingUser.houseListing, houseListingUser.listing, houseListingUser.user, city })
                     .Join(context.Districts,
                           houseListingCity => houseListingCity.listing.DistrictId,
                           district => district.Id,
-                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.city, district })
+                          (houseListingCity, district) => new { houseListingCity.houseListing, houseListingCity.listing, houseListingCity.user, houseListingCity.city, district })
                     .Join(context.HouseTypes,
                           houseListingDistrict => houseListingDistrict.houseListing.TypeId,
                           houseType => houseType.Id,
-                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.city, houseListingDistrict.district, houseType })
+                          (houseListingDistrict, houseType) => new { houseListingDistrict.houseListing, houseListingDistrict.listing, houseListingDistrict.user, houseListingDistrict.city, houseListingDistrict.district, houseType })
                     .Join(context.ListingTypes,
                           houseListingType => houseListingType.listing.ListingTypeId,
                           listingType => listingType.Id,
-                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
+                          (houseListingType, listingType) => new { houseListingType.houseListing, houseListingType.listing, houseListingType.user, houseListingType.city, houseListingType.district, houseListingType.houseType, listingType })
                     .GroupJoin(context.ListingImages,
                                houseListingTypeInfo => houseListingTypeInfo.listing.ListingId,
                                image => image.ListingId,
                                (houseListingTypeInfo, images) => new { houseListingTypeInfo, images });
 
-
-
-                query = query.Where(dto => dto.houseListingTypeInfo.listing.Status == true);
+                // Sadece aktif listeleri ve kullanıcıları göster
+                query = query.Where(dto => dto.houseListingTypeInfo.listing.Status == true && dto.houseListingTypeInfo.user.Status == true);
 
                 // Filtre uygulamaları
                 if (filter != null)
@@ -548,6 +554,34 @@ namespace DataAccess.Concrete.EntityFramework
 
 
                 return result;
+            }
+        }
+
+        public int GetActiveHouseListingCount()
+        {
+            using(ReaContext context =  new ReaContext())
+            {
+                var query = from houseListing in context.HouseListings
+                            join listing in context.Listings on houseListing.ListingId equals listing.ListingId
+                            join user in context.Users on listing.UserId equals user.Id
+                            where user.Status == true && listing.Status == true
+                            select houseListing;
+
+                return query.Count();
+            }
+        }
+
+        public int GetPassiveHouseListingCount()
+        {
+            using (ReaContext context = new ReaContext())
+            {
+                var query = from houseListing in context.HouseListings
+                            join listing in context.Listings on houseListing.ListingId equals listing.ListingId
+                            join user in context.Users on listing.UserId equals user.Id
+                            where !(user.Status == true && listing.Status == true)
+                            select houseListing;
+
+                return query.Count();
             }
         }
     }

@@ -179,5 +179,15 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<LandListingDto>>(_landListingDal.GetPaginatedListingsWithFilterAndSorting(filter, sorting, pageNumber, pageSize));
         }
+
+        public IDataResult<int> GetActiveLandListingCount()
+        {
+            return new SuccessDataResult<int>();
+        }
+
+        public IDataResult<int> GetPassiveLandListingCount()
+        {
+            return new SuccessDataResult<int>();
+        }
     }
 }

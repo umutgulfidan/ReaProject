@@ -138,5 +138,26 @@ namespace WebAPI.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet("getactivelandlistingcount")]
+        public IActionResult GetActiveListingCount()
+        {
+            var result = _landListingService.GetActiveLandListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getpassivelandlistingcount")]
+        public IActionResult GetPassiveListingCount()
+        {
+            var result = _landListingService.GetPassiveLandListingCount();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
