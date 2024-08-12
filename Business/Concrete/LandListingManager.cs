@@ -182,12 +182,12 @@ namespace Business.Concrete
 
         public IDataResult<int> GetActiveLandListingCount()
         {
-            return new SuccessDataResult<int>();
+            return new SuccessDataResult<int>(_landListingDal.GetActiveLandListingCount());
         }
 
         public IDataResult<int> GetPassiveLandListingCount()
         {
-            return new SuccessDataResult<int>();
+            return new SuccessDataResult<int>(_landListingDal.GetPassiveLandListingCount());
         }
     }
 }
