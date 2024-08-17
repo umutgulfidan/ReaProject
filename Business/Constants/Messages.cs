@@ -113,6 +113,7 @@ namespace Business.Constants
         public static string UserOperationClaimDeleted = "Yetki başarıyla alındı";
         public static string UserOperationClaimUpdated = "Yetki başarıyla güncellendi";
         public static string UserOperationClaimListed = "Yetkiler başarıyla listelendi";
+        public static string UserOperationClaimAlreadyExisting = "Vermeye çalıştığınız rol zaten kullanıcıda mevcut.";
 
 
     }
