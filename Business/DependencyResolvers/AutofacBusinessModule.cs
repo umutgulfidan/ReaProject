@@ -56,6 +56,32 @@ namespace Business.DependencyResolvers
             builder.RegisterType<EfUserImageDal>().As<IUserImageDal>().SingleInstance();
             builder.RegisterType<UserImageManager>().As<IUserImageService>().SingleInstance();
 
+            //--Complaint
+            builder.RegisterType<ComplaintManager>().As<IComplaintService>().SingleInstance();
+            builder.RegisterType<EfComplaintDal>().As<IComplaintDal>().SingleInstance();
+
+            builder.RegisterType<ComplaintStatusManager>().As<IComplaintStatusService>().SingleInstance();
+            builder.RegisterType<EfComplaintStatusDal>().As<IComplaintStatusDal>().SingleInstance();
+
+            builder.RegisterType<EfUserComplaintDal>().As<IUserComplaintDal>().SingleInstance();
+            builder.RegisterType<UserComplaintManager>().As<IUserComplaintService>().SingleInstance();
+
+            builder.RegisterType<EfUserComplaintReasonDal>().As<IUserComplaintReasonDal>().SingleInstance();
+            builder.RegisterType<UserComplaintReasonManager>().As<IUserComplaintReasonService>().SingleInstance();
+
+            builder.RegisterType<EfListingComplaintDal>().As<IListingComplaintDal>().SingleInstance();
+            builder.RegisterType<ListingComplaintManager>().As<IListingComplaintService>().SingleInstance();
+
+            builder.RegisterType<EfListingComplaintReasonDal>().As<IListingComplaintReasonDal>().SingleInstance();
+            builder.RegisterType<ListingComplaintReasonManager>().As<IListingComplaintReasonService>().SingleInstance();
+
+            builder.RegisterType<EfListingComplaintReasonDal>().As<IListingComplaintReasonDal>().SingleInstance();
+            builder.RegisterType<ListingComplaintReasonManager>().As<IListingComplaintReasonService>().SingleInstance();
+
+            builder.RegisterType<EfComplaintResponseDal>().As<IComplaintResponseDal>().SingleInstance();
+            builder.RegisterType<ComplaintResponseManager>().As<IComplaintResponseService>().SingleInstance();
+
+            //--------
 
 
             builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
