@@ -39,6 +39,17 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
 
+        //Complaints
+        public DbSet<Complaint> Complaints { get; set; }
+        public DbSet<ComplaintStatus> ComplaintStatuses { get; set; }
+        public DbSet<UserComplaint> UserComplaints { get; set; }
+        public DbSet<UserComplaintReason> UserComplaintReasons { get; set; }
+        public DbSet<ListingComplaint> ListingComplaints { get; set; }
+        public DbSet<ListingComplaintReason> ListingComplaintReasons { get; set; }
+
+        public DbSet<ComplaintResponse> ComplaintResponses { get; set; }
+
+        //Views
         public DbSet<ListingDetailsView> ListingDetailsView { get; set; }
     }
 }

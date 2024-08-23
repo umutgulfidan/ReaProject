@@ -39,6 +39,7 @@ namespace Business.Constants
         public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
         public static string PassiveAccount = "Giriş yapmaya çalıştığınız hesap pasif durumda.Yasaklanmış ya da silinmiş olabilir.";
+        public static string LoginRequired = "Bu işlemi yapabilmeniz için giriş yapmanız gerekiyor";
 
         //City
 
@@ -114,6 +115,57 @@ namespace Business.Constants
         public static string UserOperationClaimUpdated = "Yetki başarıyla güncellendi";
         public static string UserOperationClaimListed = "Yetkiler başarıyla listelendi";
         public static string UserOperationClaimAlreadyExisting = "Vermeye çalıştığınız rol zaten kullanıcıda mevcut.";
+
+        // Complaint
+        public static string ComplaintAdded = "Şikayet başarıyla eklendi";
+        public static string ComplaintDeleted = "Şikayet başarıyla silindi";
+        public static string ComplaintListed = "Şikayetler başarıyla listelendi";
+        public static string ComplaintUpdated = "Şikayet başarıyla güncellendi";
+        public static string ComplaintNotFound = "Şikayet bulunamadı";
+
+        // ComplaintStatus
+        public static string ComplaintStatusAdded = "Şikayet durumu başarıyla eklendi";
+        public static string ComplaintStatusDeleted = "Şikayet durumu başarıyla silindi";
+        public static string ComplaintStatusListed = "Şikayet durumları başarıyla listelendi";
+        public static string ComplaintStatusUpdated = "Şikayet durumu başarıyla güncellendi";
+        public static string ComplaintStatusNotFound = "Şikayet durumu bulunamadı";
+
+        // ListingComplaintReason
+        public static string ListingComplaintReasonAdded = "İlan şikayet nedeni başarıyla eklendi";
+        public static string ListingComplaintReasonDeleted = "İlan şikayet nedeni başarıyla silindi";
+        public static string ListingComplaintReasonListed = "İlan şikayet nedenleri başarıyla listelendi";
+        public static string ListingComplaintReasonUpdated = "İlan şikayet nedeni başarıyla güncellendi";
+        public static string ListingComplaintReasonNotFound = "İlan şikayet nedeni bulunamadı";
+
+        // UserComplaintReason
+        public static string UserComplaintReasonAdded = "Kullanıcı şikayet nedeni başarıyla eklendi";
+        public static string UserComplaintReasonDeleted = "Kullanıcı şikayet nedeni başarıyla silindi";
+        public static string UserComplaintReasonListed = "Kullanıcı şikayet nedenleri başarıyla listelendi";
+        public static string UserComplaintReasonUpdated = "Kullanıcı şikayet nedeni başarıyla güncellendi";
+        public static string UserComplaintReasonNotFound = "Kullanıcı şikayet nedeni bulunamadı";
+
+        // ListingComplaint
+        public static string ListingComplaintAdded = "İlan şikayeti başarıyla eklendi";
+        public static string ListingComplaintDeleted = "İlan şikayeti başarıyla silindi";
+        public static string ListingComplaintListed = "İlan şikayetleri başarıyla listelendi";
+        public static string ListingComplaintUpdated = "İlan şikayeti başarıyla güncellendi";
+        public static string ListingComplaintNotFound = "İlan şikayeti bulunamadı";
+
+        // UserComplaint
+        public static string UserComplaintAdded = "Kullanıcı şikayeti başarıyla eklendi";
+        public static string UserComplaintDeleted = "Kullanıcı şikayeti başarıyla silindi";
+        public static string UserComplaintListed = "Kullanıcı şikayetleri başarıyla listelendi";
+        public static string UserComplaintUpdated = "Kullanıcı şikayeti başarıyla güncellendi";
+        public static string UserComplaintNotFound = "Kullanıcı şikayeti bulunamadı";
+
+        // ComplaintResponse
+        public static string ComplaintResponseAdded = "Şikayet cevabı başarıyla eklendi";
+        public static string ComplaintResponseDeleted = "Şikayet cevabı başarıyla silindi";
+        public static string ComplaintResponseListed = "Şikayet cevapları başarıyla listelendi";
+        public static string ComplaintResponseUpdated = "Şikayet cevabı başarıyla güncellendi";
+        public static string ComplaintResponseNotFound = "Şikayet cevabı bulunamadı";
+
+
 
 
     }

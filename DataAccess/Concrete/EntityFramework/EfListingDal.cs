@@ -294,51 +294,60 @@ namespace DataAccess.Concrete.EntityFramework
                 var defaultImagePath = PathConstants.DefaultListingImagePath;
                 var skipAmount = (pageNumber - 1) * pageSize;
 
-                
-        var query = context.Listings
-            .Where(l => l.Status == true)
-            .Join(context.Users, listing => listing.UserId, user => user.Id, (listing, user) => new { listing, user })
-            .Where(joined => joined.user.Status == true)
-            .Select(joined => joined.listing);
+                var query = context.Listings
+                    .Join(context.Users, listing => listing.UserId, user => user.Id, (listing, user) => new { listing, user })
+                    .Select(joined => joined);
 
                 if (filter != null)
                 {
                     if (filter.ListingId.HasValue)
                     {
-                        query = query.Where(dto => dto.ListingId == filter.ListingId);
+                        query = query.Where(dto => dto.listing.ListingId == filter.ListingId);
                     }
                     if (filter.ListingTypeId.HasValue)
                     {
-                        query = query.Where(dto => dto.ListingTypeId == filter.ListingTypeId);
+                        query = query.Where(dto => dto.listing.ListingTypeId == filter.ListingTypeId);
                     }
                     if (filter.CityId.HasValue)
                     {
-                        query = query.Where(dto => dto.CityId == filter.CityId);
+                        query = query.Where(dto => dto.listing.CityId == filter.CityId);
                     }
                     if (filter.DistrictId.HasValue)
                     {
-                        query = query.Where(dto => dto.DistrictId == filter.DistrictId);
+                        query = query.Where(dto => dto.listing.DistrictId == filter.DistrictId);
                     }
                     if (filter.MaxPrice.HasValue)
                     {
-                        query = query.Where(dto => dto.Price <= filter.MaxPrice);
+                        query = query.Where(dto => dto.listing.Price <= filter.MaxPrice);
                     }
                     if (filter.MinPrice.HasValue)
                     {
-                        query = query.Where(dto => dto.Price >= filter.MinPrice);
+                        query = query.Where(dto => dto.listing.Price >= filter.MinPrice);
                     }
                     if (filter.MaxSquareMeter.HasValue)
                     {
-                        query = query.Where(dto => dto.SquareMeter <= filter.MaxSquareMeter);
+                        query = query.Where(dto => dto.listing.SquareMeter <= filter.MaxSquareMeter);
                     }
                     if (filter.MinSquareMeter.HasValue)
                     {
-                        query = query.Where(dto => dto.SquareMeter >= filter.MinSquareMeter);
+                        query = query.Where(dto => dto.listing.SquareMeter >= filter.MinSquareMeter);
                     }
                     if (!filter.SearchText.IsNullOrEmpty())
                     {
                         var filterText = filter.SearchText.ToLower();
-                        query = query.Where(dto => dto.Title.Contains(filterText) || dto.ListingId.ToString() == filterText);
+                        query = query.Where(dto => dto.listing.Title.Contains(filterText) || dto.listing.ListingId.ToString() == filterText);
+                    }
+                    if (filter.PropertyTypeId.HasValue)
+                    {
+                        query = query.Where(dto => dto.listing.PropertyTypeId == filter.PropertyTypeId);
+                    }
+                    if (filter.ListingStatus.HasValue)
+                    {
+                        query = query.Where(dto => dto.listing.Status == filter.ListingStatus);
+                    }
+                    if (filter.UserStatus.HasValue)
+                    {
+                        query = query.Where(dto => dto.user.Status == filter.UserStatus);
                     }
                 }
 
@@ -348,38 +357,38 @@ namespace DataAccess.Concrete.EntityFramework
                     {
                         case "date":
                             query = sorting.SortDirection == SortDirection.Ascending ?
-                                query.OrderBy(l => l.Date) :
-                                query.OrderByDescending(l => l.Date);
+                                query.OrderBy(l => l.listing.Date) :
+                                query.OrderByDescending(l => l.listing.Date);
                             break;
                         case "price":
                             query = sorting.SortDirection == SortDirection.Ascending ?
-                                query.OrderBy(l => l.Price) :
-                                query.OrderByDescending(l => l.Price);
+                                query.OrderBy(l => l.listing.Price) :
+                                query.OrderByDescending(l => l.listing.Price);
                             break;
                         case "squaremeter":
                             query = sorting.SortDirection == SortDirection.Ascending ?
-                            query.OrderBy(l => l.SquareMeter) :
-                            query.OrderByDescending(l => l.SquareMeter);
+                                query.OrderBy(l => l.listing.SquareMeter) :
+                                query.OrderByDescending(l => l.listing.SquareMeter);
                             break;
                         // Diğer sıralama seçenekleri buraya eklenebilir
                         default:
                             // Varsayılan olarak belirli bir sütuna göre sırala
-                            query = query.OrderByDescending(l => l.Date);
+                            query = query.OrderByDescending(l => l.listing.Date);
                             break;
                     }
                 }
                 else
                 {
-                    query = query.OrderByDescending(l => l.Date);
+                    query = query.OrderByDescending(l => l.listing.Date);
                 }
 
                 var paginatedListings = query
                     .Skip(skipAmount)
                     .Take(pageSize)
                     .Join(context.Cities,
-                        listing => listing.CityId,
+                        listing => listing.listing.CityId,
                         city => city.Id,
-                        (listing, city) => new { listing, city })
+                        (listing, city) => new { listing.listing, city })
                     .Join(context.Districts,
                         listingCity => listingCity.listing.DistrictId,
                         district => district.Id,
@@ -414,9 +423,9 @@ namespace DataAccess.Concrete.EntityFramework
                     .ToList();
 
                 return paginatedListings;
-
             }
         }
+
 
         public int GetActiveListingCount()
         {

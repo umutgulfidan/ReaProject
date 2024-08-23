@@ -17,5 +17,9 @@ namespace Entities.DTOs
         public int? MaxPrice { get; set; }
         public int? MinSquareMeter { get; set; }
         public int? MaxSquareMeter { get; set; }
+
+        public int? PropertyTypeId { get; set; }
+        public bool? ListingStatus { get; set; }
+        public bool? UserStatus { get; set; }
     }
 }
