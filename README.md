@@ -30,7 +30,7 @@ Frontend için [[Rea-Frontend](https://github.com/Utku-Genc/Rea-Frontend)] adres
 
 ## Proje Raporu
 
-Proje raporuna [Rapor](https://github.com/user-attachments/files/19960289/yazlab_rapor.pdf) linkinden erişebilirsiniz.
+Proje raporuna [Rapor](https://github.com/umutgulfidan/ReaProject/files/15212558/26_rapor.pdf) linkinden erişebilirsiniz.
 
 
 
